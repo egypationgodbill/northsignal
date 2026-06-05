@@ -1,0 +1,15 @@
+{
+  "name": "northsignal",
+  "version": "0.1.0",
+  "description": "Bimonthly tracker for Canadian AI policy, funding programs, and RFPs — scrapes official sources, diffs against the last run, emits a newsletter digest.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "scrape": "node src/index.js",
+    "render": "node src/render.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "cheerio": "^1.0.0"
+  }
+}

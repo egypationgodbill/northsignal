@@ -1,0 +1,32 @@
+name: scrape
+
+# Bimonthly: 13:00 UTC on the 1st of every other month. Plus manual runs.
+on:
+  schedule:
+    - cron: "0 13 1 */2 *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: NorthSignal
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm test
+      - run: npm run scrape
+      - name: Commit new issue
+        run: |
+          git config user.name "northsignal-bot"
+          git config user.email "bot@northsignal.local"
+          git add data site
+          git diff --cached --quiet || git commit -m "chore: scrape $(date -u +%F)"
+          git push

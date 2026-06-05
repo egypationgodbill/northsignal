@@ -1,0 +1,34 @@
+[
+  {
+    "key": "ised-strategy",
+    "name": "ISED — National AI Strategy (AI for All)",
+    "url": "https://ised-isde.canada.ca/site/ised/en/canadas-national-artificial-intelligence-strategy-ai-all",
+    "exclude": ["#_Toc", "form/contact"]
+  },
+  {
+    "key": "ised-news",
+    "name": "ISED — Newsroom",
+    "url": "https://www.canada.ca/en/innovation-science-economic-development/news.html",
+    "include": ["ai|artificial intelligence|fund|program|invest|compute|innovation|chair"]
+  },
+  {
+    "key": "scale-ai",
+    "name": "Scale AI — News",
+    "url": "https://www.scaleai.ca/news/"
+  },
+  {
+    "key": "mila",
+    "name": "Mila — News",
+    "url": "https://mila.quebec/en/news"
+  },
+  {
+    "key": "vector",
+    "name": "Vector Institute — News",
+    "url": "https://vectorinstitute.ai/news/"
+  },
+  {
+    "key": "amii",
+    "name": "Amii — Latest",
+    "url": "https://www.amii.ca/latest-from-amii/"
+  }
+]
