@@ -60,9 +60,22 @@ Edit `sources.json`:
 
 ## Automation
 
-`.github/workflows/scrape.yml` runs on the 1st of every other month (and on
-manual dispatch), runs the tests, scrapes, and commits the new issue back to the
-repo.
+Hosted on **GitHub Pages**, refreshed by a scheduled GitHub Action.
+
+`/.github/workflows/northsignal.yml` (at the **repo root** — GitHub only runs
+workflows from there) does two things:
+
+- **schedule / manual** — runs tests, scrapes, commits the refreshed
+  `data/` + `site/` back to `main`, then deploys `site/` to Pages.
+- **push to main** — redeploys the committed `site/` (e.g. after a design change).
+
+One-time setup in the GitHub repo settings:
+
+1. **Settings → Pages → Source: GitHub Actions**
+2. **Settings → Actions → General → Workflow permissions: Read and write**
+   (so the scrape job can commit the new issue)
+
+Live URL: `https://egypationgodbill.github.io/Random-ideas/`
 
 ## Roadmap (v0 → v1)
 
