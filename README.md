@@ -62,8 +62,7 @@ Edit `sources.json`:
 
 Hosted on **GitHub Pages**, refreshed by a scheduled GitHub Action.
 
-`/.github/workflows/northsignal.yml` (at the **repo root** — GitHub only runs
-workflows from there) does two things:
+`.github/workflows/deploy.yml` does two things:
 
 - **schedule / manual** — runs tests, scrapes, commits the refreshed
   `data/` + `site/` back to `main`, then deploys `site/` to Pages.
@@ -75,7 +74,7 @@ One-time setup in the GitHub repo settings:
 2. **Settings → Actions → General → Workflow permissions: Read and write**
    (so the scrape job can commit the new issue)
 
-Live URL: `https://egypationgodbill.github.io/Random-ideas/`
+Live URL: `https://egypationgodbill.github.io/northsignal/`
 
 ## Roadmap (v0 → v1)
 

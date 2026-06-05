@@ -235,7 +235,7 @@ function footer(m) {
 const blockHead = (title, count) =>
   `<div class="block-head"><h2>${esc(title)}</h2><span class="rule"></span><span class="count">${esc(count)}</span></div>`;
 
-const REPO = "https://github.com/egypationgodbill/Random-ideas";
+const REPO = "https://github.com/egypationgodbill/northsignal";
 
 function esc(s) {
   return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");

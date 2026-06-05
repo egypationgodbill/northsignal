@@ -1,0 +1,63 @@
+name: deploy
+
+# schedule/manual -> test, scrape, commit refreshed data+site, deploy to Pages
+# push to main     -> redeploy the committed site/ (e.g. a design change)
+on:
+  schedule:
+    - cron: "0 13 1 */2 *" # 13:00 UTC, 1st of every other month
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "site/**"
+      - "src/**"
+      - ".github/workflows/deploy.yml"
+
+permissions:
+  contents: write # scrape job commits the refreshed issue
+  pages: write # deploy to GitHub Pages
+  id-token: write # Pages deployment auth
+
+concurrency:
+  group: pages
+  cancel-in-progress: false
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm install
+      - run: npm test
+
+      # Scrape only on schedule/manual runs — a plain push just redeploys.
+      - name: Scrape latest issue
+        if: github.event_name != 'push'
+        run: npm run scrape
+
+      - name: Commit refreshed issue
+        if: github.event_name != 'push'
+        run: |
+          git config user.name "northsignal-bot"
+          git config user.email "bot@northsignal.local"
+          git add data site
+          git diff --cached --quiet || git commit -m "chore: scrape $(date -u +%F)"
+          git push
+
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4
