@@ -1,0 +1,598 @@
+[
+  {
+    "date": "2026-06-05",
+    "counts": {
+      "new": 90,
+      "changed": 0
+    },
+    "perSource": [
+      {
+        "key": "ised-strategy",
+        "name": "ISED — National AI Strategy (AI for All)",
+        "added": [
+          {
+            "id": "e69f9987bedf",
+            "source": "ised-strategy",
+            "title": "Canada’s National Artificial Intelligence Strategy: AI for All (PDF, 2.37 MB)",
+            "url": "https://ised-isde.canada.ca/site/ised/sites/default/files/documents/1001_01_26_ai_strategy_draft_june_4_en-125pm.pdf"
+          }
+        ],
+        "changed": [],
+        "total": 1
+      },
+      {
+        "key": "ised-news",
+        "name": "ISED — Newsroom",
+        "added": [],
+        "changed": [],
+        "total": 0
+      },
+      {
+        "key": "scale-ai",
+        "name": "Scale AI — News",
+        "added": [
+          {
+            "id": "7c9b9aead549",
+            "source": "scale-ai",
+            "title": "26 March 2026Canada’s AI and Tech: Converting Leadership into Strategic Partnerships at VivaTech 2026",
+            "url": "https://www.scaleai.ca/canadas-ai-and-tech-at-vivatech-2026/"
+          },
+          {
+            "id": "6d4a7da7a34b",
+            "source": "scale-ai",
+            "title": "11 February 2026Québec to support innovative AI projects across the Zone économique métropolitaine (ZEM)",
+            "url": "https://www.scaleai.ca/quebec-to-support-innovative-ai-projects-in-the-zone-economique-metropolitaine-zem/"
+          },
+          {
+            "id": "c1864e509a58",
+            "source": "scale-ai",
+            "title": "2 February 2026SCALE AI to Lead Canada’s AI and Technology Delegation to the 2026 World Governments Summit in Dubai",
+            "url": "https://www.scaleai.ca/scale-ai-to-lead-delegation-to-the-2026-world-governments-summit/"
+          },
+          {
+            "id": "2d802b19f081",
+            "source": "scale-ai",
+            "title": "21 January 2026Canadian AI for The Public Services at Dubai’s World Governments Summit in a Mission Led by Scale AI",
+            "url": "https://www.scaleai.ca/canadian-ai-for-the-public-services/"
+          },
+          {
+            "id": "02bf76ece598",
+            "source": "scale-ai",
+            "title": "17 December 2025SCALE AI Announces New Investments to Accelerate AI Adoption Across Manitoba",
+            "url": "https://www.scaleai.ca/pancanadian-announcement-manitoba/"
+          },
+          {
+            "id": "167aeaa13804",
+            "source": "scale-ai",
+            "title": "17 December 2025SCALE AI Announces More Than $73 M in New Investments for High-Impact AI Projects Across Québec",
+            "url": "https://www.scaleai.ca/pancanadian-announcement-quebec/"
+          },
+          {
+            "id": "9271d598d6c5",
+            "source": "scale-ai",
+            "title": "17 December 2025SCALE AI Announces New Investments to Accelerate AI Adoption Across British Columbia",
+            "url": "https://www.scaleai.ca/pancanadian-announcement-bc/"
+          },
+          {
+            "id": "67154f64e3d9",
+            "source": "scale-ai",
+            "title": "17 December 2025SCALE AI Announces New Investments to Accelerate AI Adoption Across Alberta",
+            "url": "https://www.scaleai.ca/pancanadian-announcement-alberta/"
+          },
+          {
+            "id": "9688da8d37b8",
+            "source": "scale-ai",
+            "title": "16 December 2025Record-Breaking SCALE AI Funding Round of Nearly $129M to Drive Canada’s Competitiveness with Homegrown AI",
+            "url": "https://www.scaleai.ca/pancanadian-announcement-toronto/"
+          },
+          {
+            "id": "511ef64ef96c",
+            "source": "scale-ai",
+            "title": "10 July 2025Canada’s AI Adoption Accelerates, Driving Growth for Industries: Nearly $100M Invested in 23 New Projects Through SCALE AI’s Latest Funding Round",
+            "url": "https://www.scaleai.ca/100m-invested-in-23-new-projects-through-scale-ais-latest-funding-round/"
+          },
+          {
+            "id": "e184f4424f2d",
+            "source": "scale-ai",
+            "title": "17 June 2025VivaTech 2025: Canada’s AI is Open for Business",
+            "url": "https://www.scaleai.ca/vivatech-2025-canadas-ai-is-open-for-business/"
+          },
+          {
+            "id": "1930fa5977e9",
+            "source": "scale-ai",
+            "title": "8 April 2025$30M to Scale Canada’s Ambition in AI",
+            "url": "https://www.scaleai.ca/30m-to-scale-canadas-ambition-in-ai/"
+          },
+          {
+            "id": "cdab6689ccfd",
+            "source": "scale-ai",
+            "title": "3 April 2025Over 500 Canadian Tech Leaders at VivaTech 2025",
+            "url": "https://www.scaleai.ca/over-500-canadian-tech-leaders-at-vivatech-2025/"
+          },
+          {
+            "id": "8cad4e9e0138",
+            "source": "scale-ai",
+            "title": "19 March 2025Scale AI launches a nationwide call for projects to support youth training in STEM fields",
+            "url": "https://www.scaleai.ca/scale-ai-launches-call-for-projects-to-support-youth-training-in-stem-fields/"
+          },
+          {
+            "id": "437c8b60aff4",
+            "source": "scale-ai",
+            "title": "4 February 2025Canada at VivaTech 2025: Scale AI Launches a Call for Applications to Join the Official Delegation",
+            "url": "https://www.scaleai.ca/canada-at-vivatech-2025-scale-ai-launches-a-call-for-applications-to-join-the-official-delegation/"
+          },
+          {
+            "id": "6963fd2e97be",
+            "source": "scale-ai",
+            "title": "26 September 2024Scale AI launches a call for projects in generative AI for Canadian industries",
+            "url": "https://www.scaleai.ca/scale-ai-launches-a-call-for-projects-in-generative-ai-for-canadian-industries/"
+          },
+          {
+            "id": "c068645a47d8",
+            "source": "scale-ai",
+            "title": "11 September 2024Scale AI to Launch a Call for Projects Focused on Generative Artificial Intelligence",
+            "url": "https://www.scaleai.ca/scale-ai-will-launch-a-call-for-projects-dedicated-to-generative-artificial-intelligence/"
+          },
+          {
+            "id": "40521047623d",
+            "source": "scale-ai",
+            "title": "4 June 2024SCALE AI announces a major financing round with more than $96M in investments supporting 22 AI projects",
+            "url": "https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-with-more-than-96m-in-investments-supporting-22-ai-projects/"
+          },
+          {
+            "id": "72dbe57fc8b5",
+            "source": "scale-ai",
+            "title": "16 April 2024Scale AI Unveils Enhanced Acceleration Program to Propel Canada’s AI Startup Ecosystem",
+            "url": "https://www.scaleai.ca/scale-ai-unveils-enhanced-acceleration-program-to-propel-canadas-ai-startup-ecosystem/"
+          },
+          {
+            "id": "184882018eb1",
+            "source": "scale-ai",
+            "title": "11 April 2024Record-Breaking 60-Member Delegation to Showcase Canadian AI Excellence at VivaTech 2024, Europe’s Largest Tech Event",
+            "url": "https://www.scaleai.ca/record-breaking-delegation-canada-ai-vivatech-2024/"
+          },
+          {
+            "id": "af18da6e6762",
+            "source": "scale-ai",
+            "title": "7 April 2024SCALE AI welcomes the historic investment in artificial intelligence announced by the Government of Canada to drive economic growth",
+            "url": "https://www.scaleai.ca/scale-ai-welcomes-the-historic-investment-in-artificial-intelligence-announced-by-the-government-of-canada-to-drive-economic-growth/"
+          },
+          {
+            "id": "ad2518a6d67c",
+            "source": "scale-ai",
+            "title": "25 March 2024Scale AI Launches Its New Workforce Training Program to Empower Canada’s Workforce in Digital Intelligence",
+            "url": "https://www.scaleai.ca/scale-ai-launches-its-new-workforce-training-program-to-empower-canadas-workforce-in-digital-intelligence/"
+          },
+          {
+            "id": "72d43f01fc8b",
+            "source": "scale-ai",
+            "title": "2 February 2024The AI Ecosystem at VivaTech 2024: Scale AI launches a call for applications for Canadian AI suppliers",
+            "url": "https://www.scaleai.ca/ai-delegation-vivatech-2024/"
+          },
+          {
+            "id": "370272f433c9",
+            "source": "scale-ai",
+            "title": "28 September 2023SCALE AI is announcing investments of more than $20 million in 5 AI projects for intelligent supply chains",
+            "url": "https://www.scaleai.ca/scale-ai-is-announcing-investments-of-more-than-20-million-in-5-ai-projects-for-intelligent-supply-chains/"
+          },
+          {
+            "id": "5dd92babf8da",
+            "source": "scale-ai",
+            "title": "27 September 2023SCALE AI’s AI for Healthcare Initiative: $21 million in investments supporting 9 AI projects for better healthcare in Canada",
+            "url": "https://www.scaleai.ca/scale-ai-healthcare-initiative-21-million/"
+          },
+          {
+            "id": "4d6103f17a1c",
+            "source": "scale-ai",
+            "title": "21 April 2023SCALE AI propels Québec companies with support for AI projects totalling nearly $40 million",
+            "url": "https://www.scaleai.ca/scale-ai-propels-quebec-companies-with-support-for-ai-projects-totalling-nearly-40-million/"
+          },
+          {
+            "id": "b7ca8315713e",
+            "source": "scale-ai",
+            "title": "13 February 2023SCALE AI announces record-breaking financing round with $117M in investments supporting 15 AI projects",
+            "url": "https://www.scaleai.ca/scale-ai-announces-record-breaking-financing-round-with-117m-in-investments-supporting-15-ai-projects/"
+          },
+          {
+            "id": "5ef34e70fffe",
+            "source": "scale-ai",
+            "title": "14 November 2022SCALE AI announces $25 million for 6 AI projects: AI is leading the way for more efficient and resilient supply chains in Canada",
+            "url": "https://www.scaleai.ca/ai-is-leading-the-way-for-more-efficient-and-resilient-supply-chains-in-canada-scale-ai-announces-25-million-for-6-ai-projects/"
+          },
+          {
+            "id": "9bbd45fbc670",
+            "source": "scale-ai",
+            "title": "22 August 2022SCALE AI announces a major financing round in artificial intelligence: $50 million to support 12 new projects",
+            "url": "https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-in-artificial-intelligence-50-million-to-support-12-new-projects/"
+          },
+          {
+            "id": "3be64ebe4c98",
+            "source": "scale-ai",
+            "title": "6 April 2022Accelerating the integration of artificial intelligence solutions: Scale AI announces a $24-million investment in 5 new projects",
+            "url": "https://www.scaleai.ca/accelerating-the-integration-of-artificial-intelligence-solutions-scale-ai-announces-a-24-million-investment-in-5-new-projects/"
+          },
+          {
+            "id": "56133e0a1651",
+            "source": "scale-ai",
+            "title": "14 December 2021Scale AI announces four new AI research chairs that will undoubtedly stimulate artificial intelligence innovation in Canada",
+            "url": "https://www.scaleai.ca/scale-ai-announces-four-new-ai-research-chairsthat-will-undoubtedly-stimulate-artificial-intelligence-innovation-in-canada/"
+          },
+          {
+            "id": "8109bfb82016",
+            "source": "scale-ai",
+            "title": "8 December 2021Scale AI announces its largest financing round of 2021 with twelve projects and $71 million in investments in artificial intelligence",
+            "url": "https://www.scaleai.ca/scale-ai-announces-its-largest-financing-round-of-2021-with-twelve-projects-and-71-million-in-investments-in-artificial-intelligence/"
+          },
+          {
+            "id": "590f4cb5bfc9",
+            "source": "scale-ai",
+            "title": "21 June 2021Scale AI supports four new projects and reports another extraordinary year of AI investments in Canada, for a total impact since inception of more than $200M",
+            "url": "https://www.scaleai.ca/scale-ai-supports-four-new-projects-and-reports-another-extraordinary-year-of-ai-investments-in-canada-for-a-total-impact-since-inception-of-more-than-200m/"
+          },
+          {
+            "id": "9bac40aa4b1a",
+            "source": "scale-ai",
+            "title": "15 June 2021Scale AI builds on research and talents with the launch of three new AI research chairs in Canada",
+            "url": "https://www.scaleai.ca/scale-ai-builds-on-research-and-talents-with-the-launch-of-three-new-ai-research-chairs-in-canada/"
+          },
+          {
+            "id": "e75d49037323",
+            "source": "scale-ai",
+            "title": "22 February 2021Scale AI enhances its training support programs to spur the integration of AI in companies",
+            "url": "https://www.scaleai.ca/scale-ai-enhances-its-training-support-programs-to-spur-the-integration-of-ai-in-companies/"
+          },
+          {
+            "id": "862f44fd04c7",
+            "source": "scale-ai",
+            "title": "18 February 2021Scale AI announces five projects and $16.6 million in investments in artificial intelligence",
+            "url": "https://www.scaleai.ca/scale-ai-announces-five-projects-and-16-6-million-in-investments-in-artificial-intelligence/"
+          },
+          {
+            "id": "40dec42c3159",
+            "source": "scale-ai",
+            "title": "17 November 2020Scale AI wants to encourage vocations and is investing $1 million in projects to raise technology and digital awareness",
+            "url": "https://www.scaleai.ca/scale-ai-wants-to-encourage-vocations-and-is-investing-1-million-in-projects-to-raise-technology-and-digital-awareness/"
+          },
+          {
+            "id": "73524b4adcad",
+            "source": "scale-ai",
+            "title": "10 November 2020Scale AI’s Acceleration program spreads its wings: projects of around 60 start-ups validated and at least as many under evaluation",
+            "url": "https://www.scaleai.ca/scale-ais-acceleration-program-spreads-its-wings-projects-of-around-60-start-ups-validated-and-at-least-as-many-under-evaluation/"
+          },
+          {
+            "id": "5a7b6fdfded3",
+            "source": "scale-ai",
+            "title": "6 November 2020Customized AI training to improve company productivity",
+            "url": "https://www.scaleai.ca/customized-ai-training-to-improve-company-productivity/"
+          },
+          {
+            "id": "5596f81ea69b",
+            "source": "scale-ai",
+            "title": "21 July 2020Investments of $29 million: Scale AI advances the transition to AI with five new projects",
+            "url": "https://www.scaleai.ca/investments-of-29-million-scale-ai-advances-the-transition-to-ai-with-five-new-projects/"
+          },
+          {
+            "id": "bff2e66ffcca",
+            "source": "scale-ai",
+            "title": "22 June 2020Scale AI invests to support AI workforce training for Canadian industries",
+            "url": "https://www.scaleai.ca/scale-ai-invests-to-support-ai-workforce-training-for-canadian-industries/"
+          },
+          {
+            "id": "0e10af5cf691",
+            "source": "scale-ai",
+            "title": "27 May 2020Scale AI helping to fill industry demand for leading edge AI research",
+            "url": "https://www.scaleai.ca/scale-ai-helping-to-fill-industry-demand-for-leading-edge-ai-research/"
+          },
+          {
+            "id": "6ed9d862a600",
+            "source": "scale-ai",
+            "title": "3 May 2020COVID-19 — Scale AI snaps into action and funds 8 projects to help Canada weather the crisis",
+            "url": "https://www.scaleai.ca/covid-19-scale-ai-snaps-into-action-and-funds-8-projects-to-help-canada-weather-the-crisis/"
+          },
+          {
+            "id": "de1f77dfcede",
+            "source": "scale-ai",
+            "title": "14 January 2020Investments of $75 million: Scale AI propels 10 AI projects",
+            "url": "https://www.scaleai.ca/investments-of-75-million-scale-ai-propels-10-ai-projects/"
+          },
+          {
+            "id": "b7f6fa8c0383",
+            "source": "scale-ai",
+            "title": "15 July 2019The Québec government awards $23.4 million to Scale AI for the development of AI talents",
+            "url": "https://www.scaleai.ca/the-quebec-government-awards-23-4-million-to-scale-ai-for-the-development-of-ai-talents/"
+          },
+          {
+            "id": "614162cbe4be",
+            "source": "scale-ai",
+            "title": "27 June 2019Scale AI announces the selection of innovative projects in artificial intelligence applied to supply chains",
+            "url": "https://www.scaleai.ca/scale-ai-announces-the-selection-of-innovative-projects-in-artificial-intelligence-applied-to-supply-chains/"
+          },
+          {
+            "id": "ed2154480bde",
+            "source": "scale-ai",
+            "title": "4 June 2019The Scale AI supercluster and industrialists start the work and launch their call for projects",
+            "url": "https://www.scaleai.ca/the-scale-ai-supercluster-and-industrialists-start-the-work-and-launch-their-call-for-projects/"
+          },
+          {
+            "id": "f8f6a19d2c3e",
+            "source": "scale-ai",
+            "title": "6 December 2018$290 million in support for Scale AI, the AI-Powered Supply Chains Supercluster",
+            "url": "https://www.scaleai.ca/290-million-in-support-for-scale-ai-the-ai-powered-supply-chains-supercluster/"
+          },
+          {
+            "id": "9d3132ae3b84",
+            "source": "scale-ai",
+            "title": "15 February 2018Scale AI, the AI-Powered Supply Chain Supercluster to Receive Funding from Innovation Superclusters Initiative",
+            "url": "https://www.scaleai.ca/scale-ai-the-ai-powered-supply-chain-supercluster-to-receive-funding-from-innovation-superclusters-initiative/"
+          },
+          {
+            "id": "47d05b7f22e1",
+            "source": "scale-ai",
+            "title": "10 October 2017AI-Powered Supply Chains Supercluster Now Shortlisted",
+            "url": "https://www.scaleai.ca/ai-powered-supply-chains-supercluster-now-shortlisted/"
+          }
+        ],
+        "changed": [],
+        "total": 50
+      },
+      {
+        "key": "mila",
+        "name": "Mila — News",
+        "added": [
+          {
+            "id": "8ff242a2ef2d",
+            "source": "mila",
+            "title": "Canada’s National AI Strategy: Mila Welcomes an Ambitious Vision Propelling Canada Toward Scientific and Technological Leadership",
+            "url": "https://mila.quebec/en/news/canadas-national-ai-strategy-mila-welcomes-an-ambitious-vision-propelling-canada-toward"
+          },
+          {
+            "id": "b7dcb1f95099",
+            "source": "mila",
+            "title": "Toboggan Labs Joins Mila's Industry Partner Network to Strengthen Healthcare AI Capabilities",
+            "url": "https://mila.quebec/en/news/toboggan-labs-joins-milas-industry-partner-network-to-strengthen-healthcare-ai-capabilities"
+          },
+          {
+            "id": "d2f9b45564ff",
+            "source": "mila",
+            "title": "ROOST and Mila Announce Partnership to Advance Open Source AI Safety, Starting with Youth Safety",
+            "url": "https://mila.quebec/en/news/roost-and-mila-announce-partnership-to-advance-open-source-ai-safety-starting-with-youth"
+          },
+          {
+            "id": "caadcacbf9cb",
+            "source": "mila",
+            "title": "Discover the Third Cohort of Indigenous Pathfinders in AI",
+            "url": "https://mila.quebec/en/news/discover-the-third-cohort-of-indigenous-pathfinders-in-ai"
+          },
+          {
+            "id": "3359244ac28e",
+            "source": "mila",
+            "title": "Cohere and Mila Partner to Advance Quebec French Language and Cultural Context in AI",
+            "url": "https://mila.quebec/en/news/cohere-and-mila-partner-to-advance-quebec-french-language-and-cultural-context-in-ai"
+          },
+          {
+            "id": "450e92eddff3",
+            "source": "mila",
+            "title": "Torc Robotics Partners with Mila in Institute's First-Ever Autonomous-Trucking Collaboration to Advance Physical AI",
+            "url": "https://mila.quebec/en/news/torc-robotics-partners-with-mila-in-institutes-first-ever-autonomous-trucking-collaboration-to"
+          },
+          {
+            "id": "20ee73d200cb",
+            "source": "mila",
+            "title": "Mila and CIFAR Launch the Indigenous AI Advisory Circle",
+            "url": "https://mila.quebec/en/news/mila-and-cifar-launch-the-indigenous-ai-advisory-circle"
+          },
+          {
+            "id": "a7b0273c41db",
+            "source": "mila",
+            "title": "TandemAI and Mila Announce Research Partnership to Advance AI-Driven Drug Discovery and World Models",
+            "url": "https://mila.quebec/en/news/tandemai-and-mila-announce-research-partnership-to-advance-ai-driven-drug-discovery-and-world"
+          },
+          {
+            "id": "34abff641506",
+            "source": "mila",
+            "title": "Mila and Sustainable AI Group Join Forces to Advance Environmentally Responsible AI",
+            "url": "https://mila.quebec/en/news/mila-and-sustainable-ai-group-join-forces-to-advance-environmentally-responsible-ai"
+          },
+          {
+            "id": "1e8bbb9b5d4f",
+            "source": "mila",
+            "title": "Mila Celebrates Seventeen Recipients of the 2026 EDI Scholarships Program",
+            "url": "https://mila.quebec/en/news/mila-celebrates-seventeen-recipients-of-the-2026-edi-scholarships-program"
+          }
+        ],
+        "changed": [],
+        "total": 10
+      },
+      {
+        "key": "vector",
+        "name": "Vector Institute — News",
+        "added": [
+          {
+            "id": "02bf2101613a",
+            "source": "vector",
+            "title": "Vector Institute awards 100 scholarships to Ontario’s top AI graduate students",
+            "url": "https://vectorinstitute.ai/vector-institute-awards-100-scholarships-to-ontarios-top-ai-graduate-students/"
+          },
+          {
+            "id": "68907803fb7e",
+            "source": "vector",
+            "title": "Research Mohamad Moosavi: Accelerating the search for climate solutions with AI",
+            "url": "https://vectorinstitute.ai/mohamad-moosavi-accelerating-the-search-for-climate-solutions-with-ai/"
+          },
+          {
+            "id": "9080eb7ddbc0",
+            "source": "vector",
+            "title": "AI Adoption A strategic blueprint for safe health AI implementation: Your 2026 roadmap",
+            "url": "https://vectorinstitute.ai/a-strategic-blueprint-for-safe-health-ai-implementation-your-2026-roadmap/"
+          },
+          {
+            "id": "9b7a368f8c73",
+            "source": "vector",
+            "title": "Research Hassan Ashtiani: Building trustworthy AI through mathematical foundations",
+            "url": "https://vectorinstitute.ai/hassan-ashtiani-building-trustworthy-ai-through-mathematical-foundations/"
+          },
+          {
+            "id": "07698108e81c",
+            "source": "vector",
+            "title": "Research Vector researchers advance representation learning and deep learning research at ICLR 2026",
+            "url": "https://vectorinstitute.ai/vector-researchers-advance-representation-learning-and-deep-learning-research-at-iclr-2026/"
+          }
+        ],
+        "changed": [],
+        "total": 5
+      },
+      {
+        "key": "amii",
+        "name": "Amii — Latest",
+        "added": [
+          {
+            "id": "c65bc3be9eea",
+            "source": "amii",
+            "title": "Jun 4, 2026AI for All: Canada's National AI Strategy",
+            "url": "https://www.amii.ca/updates-insights/ai-for-all-national-ai-strategy"
+          },
+          {
+            "id": "7f177dc25ece",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseMay 22, 2026Amii Launches Channel Partnership with University of Alberta to Scale Workforce-Ready AI Literacy",
+            "url": "https://www.amii.ca/updates-insights/amii-launches-channel-partnership-with-u-of-alberta"
+          },
+          {
+            "id": "4c6e4df76179",
+            "source": "amii",
+            "title": "May 22, 2026Canada builds on its AI research strength with $24M investment in 42 CIFAR AI Chairs",
+            "url": "https://www.amii.ca/updates-insights/canada-builds-on-its-ai-research-strength"
+          },
+          {
+            "id": "3ee5b8b39a26",
+            "source": "amii",
+            "title": "InsightsInsightsMay 22, 2026Upper Bound Diary: Why Canadian Creators are looking for Canadian AI",
+            "url": "https://www.amii.ca/updates-insights/upper-bound-diary-why-canadian-creators-are-looking-for-canadian-ai"
+          },
+          {
+            "id": "6051d07a72b4",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseMay 21, 2026Amii and the University of Alberta Announce Completion of Global Recruitment for World-Leading ‘AI+X’ Researchers",
+            "url": "https://www.amii.ca/updates-insights/amii-and-the-u-of-a-complete-global-recruitment-ai-x-researchers"
+          },
+          {
+            "id": "849738353b45",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseMay 21, 2026Closing the AI Literacy Divide: Amii Commissioned Research Calls for Alignment Between Higher Ed and Employer Skill Requirements",
+            "url": "https://www.amii.ca/updates-insights/closing-the-ai-literacy-divide-ub-aiwr"
+          },
+          {
+            "id": "e124d2b5cccc",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseMay 20, 2026Amii Launches $10M Health Innovation Lab to Build the Future of AI-Enabled Healthcare",
+            "url": "https://www.amii.ca/updates-insights/amii-launches-10m-health-innovation-lab"
+          },
+          {
+            "id": "6768dd935c21",
+            "source": "amii",
+            "title": "May 20, 2026Live from Upper Bound 2026",
+            "url": "https://www.amii.ca/updates-insights/live-from-upper-bound-2026"
+          },
+          {
+            "id": "050d4fe53a1d",
+            "source": "amii",
+            "title": "May 20, 2026Upper Bound Diary: Reinforcement Learning is ready for the spotlight",
+            "url": "https://www.amii.ca/updates-insights/upper-bound-diary-reinforcement-learning-is-ready-for-the-spotlight"
+          },
+          {
+            "id": "4981a6c5d28b",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseMay 15, 2026Amii Fuels Canada’s AI Momentum as Upper Bound Attendance Climbs 53% to 11,000",
+            "url": "https://www.amii.ca/updates-insights/upperbound26-fuels-canada-s-ai-momentum"
+          },
+          {
+            "id": "e56a285aee2d",
+            "source": "amii",
+            "title": "InsightsInsightsMay 14, 2026Building a Future-Ready Workforce",
+            "url": "https://www.amii.ca/updates-insights/AIWR-building-a-future-ready-workforce"
+          },
+          {
+            "id": "396a07d1eec1",
+            "source": "amii",
+            "title": "Insights+1InsightsPodcastMay 12, 2026Behind the Scenes of Upper Bound With Stephanie Enders | Approximately Correct Podcast",
+            "url": "https://www.amii.ca/updates-insights/behind-the-scenes-of-upper-bound-with-stephanie-enders-approximately-correct-podcast"
+          },
+          {
+            "id": "faa5d0cbd4db",
+            "source": "amii",
+            "title": "Media ReleaseMedia ReleaseApr 30, 2026Upper Bound Sells Out Ahead of Milestone Fifth Year",
+            "url": "https://www.amii.ca/updates-insights/upper-bound-26-sold-out"
+          },
+          {
+            "id": "dde27da333fb",
+            "source": "amii",
+            "title": "UpdatesUpdatesApr 29, 2026Amii Partners with Alberta Government to Bring AI Literacy to K-12 Classrooms",
+            "url": "https://www.amii.ca/updates-insights/amii-partners-with-alberta-government-to-bring-ai-literacy-to-k-12-classrooms"
+          },
+          {
+            "id": "b13d25c35e89",
+            "source": "amii",
+            "title": "UpdatesUpdatesApr 27, 2026ICYMI | Amii in The Globe & Mail: From AI Curiosity to AI Confidence",
+            "url": "https://www.amii.ca/updates-insights/icymi-amii-in-the-globe-mail-from-ai-curiosity-to-ai-confidence"
+          },
+          {
+            "id": "5885ddae0116",
+            "source": "amii",
+            "title": "InsightsInsightsApr 23, 2026Amii Research at ICLR 2026: Advancing Efficiency in Reinforcement Learning, Memory Systems, and Generative AI",
+            "url": "https://www.amii.ca/updates-insights/amii-research-at-iclr-2026-advancing-efficiency-in-reinforcement-learning-memory-systems-and-generative-ai"
+          },
+          {
+            "id": "cf238f272297",
+            "source": "amii",
+            "title": "Apr 1, 2026Building on the Foundations: Amii Launches AI Pathways Technical Track for Energy Professionals",
+            "url": "https://www.amii.ca/updates-insights/building-on-the-foundations-technical-track"
+          },
+          {
+            "id": "bbe9ccb7cefa",
+            "source": "amii",
+            "title": "Mar 24, 2026Amii Welcomes Two New Board Directors",
+            "url": "https://www.amii.ca/updates-insights/amii-welcomes-two-new-board-directors-peter-veer"
+          },
+          {
+            "id": "219eeff437b2",
+            "source": "amii",
+            "title": "Insights+1InsightsPodcastMar 17, 2026Keep AI Weird: Kate Compton on Creativity in Computing | Approximately Correct Podcast",
+            "url": "https://www.amii.ca/updates-insights/-keep-ai-weird-kate-compton-on-creativity-in-computing-approximately-correct-podcast"
+          },
+          {
+            "id": "0843940fdd65",
+            "source": "amii",
+            "title": "Mar 9, 2026Chain of Thought Explained: How small steps help LLMs solve big problems",
+            "url": "https://www.amii.ca/updates-insights/chain-of-thought-explained-how-small-steps-help-llms-solve-big-problems"
+          },
+          {
+            "id": "2b5a356bfab2",
+            "source": "amii",
+            "title": "UpdatesUpdatesFeb 26, 2026Amii Monthly News: February 2026",
+            "url": "https://www.amii.ca/updates-insights/amii-monthly-news-february-2026"
+          },
+          {
+            "id": "53b177a5b0ec",
+            "source": "amii",
+            "title": "UpdatesUpdatesFeb 19, 2026Amii researchers awarded AI Alignment Project research grants for safer, trustworthy AI",
+            "url": "https://www.amii.ca/updates-insights/amii-researchers-awarded-ai-alignment-project-research-grants-for-safer-trustworthy-ai"
+          },
+          {
+            "id": "9c826a449cb8",
+            "source": "amii",
+            "title": "Feb 12, 2026From Mars to Tornado Alley: Meet the Experts Joining Amii’s AI for Earth Program",
+            "url": "https://www.amii.ca/updates-insights/meet-the-experts-AIforEarth"
+          },
+          {
+            "id": "719a1c2a4c34",
+            "source": "amii",
+            "title": "InsightsInsightsFeb 10, 2026What wasps can teach us about artificial intelligence",
+            "url": "https://www.amii.ca/updates-insights/what-wasps-can-teach-us-about-artificial-intelligence"
+          }
+        ],
+        "changed": [],
+        "total": 24
+      }
+    ]
+  }
+]
