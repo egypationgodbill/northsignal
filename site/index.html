@@ -4,460 +4,923 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NorthSignal — Canadian AI policy &amp; funding tracker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:#fbfaf8; --panel:#fff; --ink:#1c1b1a; --muted:#8a857c; --faint:#b3ada3;
-  --line:#ebe6de; --accent:#b8351f; --accent-soft:#f6ece9; --chip:#f3f0ea;
+  --bg:#0a0c0e; --bg-2:#0e1114; --panel:#12161a; --panel-2:#161b20;
+  --line:#1f262c; --line-2:#2a333a; --ink:#e8ebe6; --ink-2:#c2c8c4;
+  --muted:#7e878c; --faint:#525c61;
+  --signal:#ff4632; --signal-dim:#c23425; --signal-glow:rgba(255,70,50,.22); --amber:#e9a23b;
+  --aurora-1:#33e6b0; --aurora-2:#4aa6ff; --aurora-3:#b070ff;
+  --mono:"IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+  --sans:"IBM Plex Sans", ui-sans-serif, -apple-system, sans-serif;
+  --maxw:1060px;
 }
-@media (prefers-color-scheme: dark) {
-  :root { --bg:#15130f; --panel:#1e1b16; --ink:#ece7de; --muted:#938c80; --faint:#6a6358;
-          --line:#2b2720; --accent:#e8806f; --accent-soft:#2a201d; --chip:#241f19; }
+* { box-sizing:border-box; }
+html { scroll-behavior:smooth; }
+body {
+  margin:0; background:var(--bg); color:var(--ink); font:400 16px/1.6 var(--sans);
+  -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+  background-image:
+    radial-gradient(1200px 480px at 78% -8%, rgba(74,166,255,.05), transparent 60%),
+    radial-gradient(900px 420px at 12% -6%, rgba(176,112,255,.045), transparent 60%);
+  background-attachment:fixed;
 }
-* { box-sizing: border-box; }
-body { margin:0; background:var(--bg); color:var(--ink);
-  font:16px/1.6 ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  -webkit-font-smoothing:antialiased; }
-
-/* masthead keeps the editorial serif accent */
-.masthead { text-align:center; padding:2.5rem 1.25rem 1.5rem; border-bottom:1px solid var(--line); }
-.brand { font:800 2.3rem/1 ui-sans-serif, -apple-system, sans-serif; letter-spacing:-.03em; }
-.brand span { color:var(--accent); }
-.tagline { color:var(--muted); margin:.55rem 0 0; font:italic 400 1rem/1.4 ui-serif, Georgia, serif; }
-
-main { max-width:720px; margin:0 auto; padding:1.5rem 1.25rem 3rem; }
-
-h1 { font:800 1.9rem/1.05 ui-sans-serif, sans-serif; margin:.25rem 0 1rem; letter-spacing:-.02em; }
-h2 { font:600 .72rem/1 ui-sans-serif, sans-serif; text-transform:uppercase; letter-spacing:.14em;
-  color:var(--muted); margin:2.75rem 0 1rem; padding-bottom:.5rem; border-bottom:1px solid var(--line); }
-h3 { font:650 1.05rem/1.3 ui-sans-serif, sans-serif; margin:1.6rem 0 .5rem; }
-
 a { color:inherit; text-decoration:none; }
-a.t { color:var(--ink); }
-a.t:hover { color:var(--accent); }
+.wrap { max-width:var(--maxw); margin:0 auto; padding:0 28px; }
+.empty { color:var(--muted); padding:60px 0; font-family:var(--mono); }
+.mono { font-family:var(--mono); }
+.label { font:600 11px/1 var(--mono); text-transform:uppercase; letter-spacing:.18em; color:var(--muted); }
 
-.kicker { font:600 .68rem/1 ui-sans-serif, sans-serif; text-transform:uppercase;
-  letter-spacing:.16em; color:var(--accent); }
-.stats { display:flex; gap:1.75rem; flex-wrap:wrap; margin:.5rem 0 0; }
-.stat { display:flex; flex-direction:column; gap:.15rem; }
-.stat .num { font:750 1.7rem/1 ui-sans-serif, sans-serif; letter-spacing:-.02em; }
-.stat .lbl { font-size:.7rem; text-transform:uppercase; letter-spacing:.1em; color:var(--muted); }
+.statusbar { position:sticky; top:0; z-index:50; background:rgba(10,12,14,.82); backdrop-filter:blur(12px); border-bottom:1px solid var(--line); }
+.statusbar .wrap { display:flex; align-items:center; gap:22px; height:52px; }
+.logo { display:flex; align-items:center; gap:10px; font:700 15px/1 var(--mono); letter-spacing:-.01em; }
+.logo .mark { width:22px; height:22px; flex:0 0 22px; }
+.logo .sig { color:var(--signal); }
+.sb-meta { display:flex; align-items:center; gap:18px; margin-left:6px; }
+.sb-item { display:flex; align-items:center; gap:7px; font:500 11.5px/1 var(--mono); color:var(--muted); white-space:nowrap; }
+.sb-item .k { color:var(--faint); letter-spacing:.06em; }
+.sb-item .v { color:var(--ink-2); }
+.dot { width:7px; height:7px; border-radius:50%; background:var(--aurora-1); }
+.dot.live { animation:pulse 2.4s ease-out infinite; }
+@keyframes pulse { 0%{box-shadow:0 0 0 0 rgba(51,230,176,.45);} 70%{box-shadow:0 0 0 6px rgba(51,230,176,0);} 100%{box-shadow:0 0 0 0 rgba(51,230,176,0);} }
+.sb-right { margin-left:auto; display:flex; align-items:center; gap:4px; }
+.sb-link { font:500 12px/1 var(--mono); color:var(--muted); padding:8px 11px; border-radius:7px; transition:.15s; }
+.sb-link:hover { color:var(--ink); background:var(--panel-2); }
+.mcp-pill { display:inline-flex; align-items:center; gap:7px; font:600 11px/1 var(--mono); letter-spacing:.04em; color:var(--aurora-1); padding:7px 11px; border:1px solid rgba(51,230,176,.32); border-radius:7px; background:rgba(51,230,176,.05); transition:.15s; }
+.mcp-pill:hover { border-color:rgba(51,230,176,.6); background:rgba(51,230,176,.1); }
+.mcp-pill .soon { color:var(--faint); font-weight:500; }
+.hide-sm { display:flex; }
 
-/* summary chips */
-.chips { display:flex; flex-wrap:wrap; gap:.45rem; }
-.chip { display:inline-flex; align-items:center; gap:.4rem; padding:.32rem .7rem;
-  background:var(--chip); border:1px solid var(--line); border-radius:999px;
-  font:500 .82rem/1 ui-sans-serif, sans-serif; color:var(--ink); transition:border-color .12s; }
-.chip:hover { border-color:var(--accent); }
-.chip-icon { font-size:.95rem; }
-.chip-count { color:var(--accent); font-weight:700; font-size:.78rem; }
+.aurora { height:2px; width:100%; background:linear-gradient(90deg, transparent, var(--aurora-1) 18%, var(--aurora-2) 50%, var(--aurora-3) 78%, transparent); opacity:.7; filter:blur(.3px); }
 
-/* highlight cards */
-.highlights { margin-top:1.75rem; }
-.highlights h3 { display:flex; align-items:center; gap:.4rem; font-size:.95rem; margin:0 0 .7rem; }
-.highlights h3::before { content:"●"; color:var(--accent); font-size:.6rem; }
-ul.cards { list-style:none; margin:0; padding:0; display:grid;
-  grid-template-columns:repeat(auto-fill, minmax(215px,1fr)); gap:.6rem; }
-.card { background:var(--panel); border:1px solid var(--line); border-radius:.6rem;
-  padding:.75rem .85rem; display:flex; flex-direction:column; gap:.5rem; }
-.card .t { font:600 .92rem/1.35 ui-sans-serif, sans-serif;
-  display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.hero { position:relative; padding:62px 0 30px; overflow:hidden; }
+.hero::before { content:""; position:absolute; inset:-40% 0 auto 0; height:340px; z-index:0;
+  background:
+    radial-gradient(620px 220px at 30% 0%, rgba(51,230,176,.10), transparent 70%),
+    radial-gradient(560px 200px at 62% 4%, rgba(74,166,255,.10), transparent 70%),
+    radial-gradient(520px 200px at 85% 0%, rgba(176,112,255,.09), transparent 70%);
+  pointer-events:none; filter:blur(8px); animation:drift 16s ease-in-out infinite alternate; }
+@keyframes drift { from{transform:translateX(-14px);} to{transform:translateX(18px);} }
+.hero .wrap { position:relative; z-index:1; }
+.hero-top { display:flex; align-items:baseline; gap:14px; flex-wrap:wrap; }
+.kicker { font:600 12px/1 var(--mono); letter-spacing:.22em; text-transform:uppercase; color:var(--signal); }
+.issue-tag { font:500 12px/1 var(--mono); letter-spacing:.06em; color:var(--muted); }
+.headline { font:600 clamp(34px,5vw,56px)/1.04 var(--mono); letter-spacing:-.02em; color:var(--ink); margin:18px 0 0; max-width:18ch; }
+.headline em { font-style:normal; color:var(--signal); }
+.lede { margin:18px 0 0; max-width:62ch; color:var(--ink-2); font:400 17px/1.6 var(--sans); }
+.lede b { color:var(--ink); font-weight:600; }
 
-/* item rows */
+.readout { display:grid; grid-template-columns:repeat(5,1fr); gap:1px; margin-top:38px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.metric { background:var(--panel); padding:22px 20px 18px; position:relative; }
+.metric:hover { background:var(--panel-2); }
+.metric .num { font:600 clamp(30px,3.6vw,44px)/1 var(--mono); letter-spacing:-.02em; color:var(--ink); display:flex; align-items:baseline; gap:4px; }
+.metric.hot .num { color:var(--signal); }
+.metric .lbl { margin-top:9px; font:600 10.5px/1.3 var(--mono); text-transform:uppercase; letter-spacing:.13em; color:var(--muted); }
+.metric .spark { position:absolute; top:18px; right:18px; font:600 10px/1 var(--mono); color:var(--faint); }
+.metric.hot .spark { color:var(--signal); }
+
+section.block { padding:46px 0 0; }
+.block-head { display:flex; align-items:center; gap:14px; margin-bottom:20px; }
+.block-head h2 { font:600 13px/1 var(--mono); text-transform:uppercase; letter-spacing:.16em; color:var(--ink-2); margin:0; }
+.block-head .rule { flex:1; height:1px; background:var(--line); }
+.block-head .count { font:500 12px/1 var(--mono); color:var(--faint); }
+
+.dist { border:1px solid var(--line); border-radius:12px; background:var(--panel); padding:20px; }
+.dist-bar { display:flex; height:38px; border-radius:7px; overflow:hidden; background:var(--bg-2); }
+.dist-seg { position:relative; transition:flex-grow .5s cubic-bezier(.2,.7,.2,1), filter .15s; min-width:3px; cursor:pointer; }
+.dist-seg:hover { filter:brightness(1.25); }
+.dist-seg .seg-pct { position:absolute; inset:0; display:flex; align-items:center; justify-content:center; font:600 11px/1 var(--mono); color:rgba(10,12,14,.7); }
+.dist-legend { display:grid; grid-template-columns:repeat(auto-fill,minmax(228px,1fr)); gap:12px 22px; margin-top:20px; }
+.leg { display:flex; align-items:baseline; gap:9px; font:500 12.5px/1.35 var(--mono); color:var(--ink-2); cursor:pointer; transition:.15s; }
+.leg:hover { color:var(--ink); }
+.leg .sw { width:10px; height:10px; border-radius:3px; flex:0 0 10px; transform:translateY(1px); }
+.leg .lc { color:var(--faint); margin-left:auto; padding-left:10px; }
+
+.cards { display:grid; grid-template-columns:repeat(auto-fill,minmax(232px,1fr)); gap:12px; }
+.mcard { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:18px; display:flex; flex-direction:column; gap:12px; transition:.18s; position:relative; overflow:hidden; }
+.mcard::after { content:""; position:absolute; left:0; top:0; bottom:0; width:2px; background:var(--signal-dim); opacity:.5; }
+.mcard:hover { border-color:var(--line-2); transform:translateY(-2px); }
+.mcard:hover::after { opacity:1; background:var(--signal); }
+.mcard .amt { font:600 30px/1 var(--mono); letter-spacing:-.02em; color:var(--signal); }
+.mcard .mt { font:500 13.5px/1.45 var(--sans); color:var(--ink); display:-webkit-box; -webkit-line-clamp:3; -webkit-box-orient:vertical; overflow:hidden; }
+.mcard .mm { display:flex; gap:8px; align-items:center; font:500 11px/1 var(--mono); color:var(--muted); margin-top:auto; }
+.mcard .mm .sep { color:var(--faint); }
+
+.filters { display:flex; flex-wrap:wrap; gap:8px; margin-bottom:8px; }
+.fchip { display:inline-flex; align-items:center; gap:8px; font:500 12.5px/1 var(--mono); color:var(--ink-2); background:var(--panel); border:1px solid var(--line); border-radius:999px; padding:9px 14px; cursor:pointer; transition:.15s; user-select:none; }
+.fchip:hover { border-color:var(--line-2); color:var(--ink); }
+.fchip.active { background:var(--ink); color:var(--bg); border-color:var(--ink); }
+.fchip .fc { font-weight:600; color:var(--faint); }
+.fchip.active .fc { color:var(--signal-dim); }
+.fchip .ic { font-size:14px; line-height:1; }
+
+.theme-grp { margin-top:30px; }
+.theme-grp.dim { display:none; }
+.theme-grp > h3 { display:flex; align-items:center; gap:11px; margin:0 0 4px; font:600 15px/1.2 var(--mono); color:var(--ink); letter-spacing:-.01em; }
+.theme-grp > h3 .ic { font-size:16px; }
+.theme-grp > h3 .tc { margin-left:auto; font:600 11px/1 var(--mono); color:var(--muted); border:1px solid var(--line); border-radius:999px; padding:4px 9px; }
+.theme-grp > h3 .accent { width:8px; height:8px; border-radius:2px; }
+
 ul.items { list-style:none; margin:0; padding:0; }
-ul.items > li { padding:.6rem 0; border-bottom:1px solid var(--line); }
-ul.items .t { font:500 1rem/1.4 ui-sans-serif, sans-serif; }
-.m { display:flex; align-items:baseline; flex-wrap:wrap; gap:.4rem; margin-top:.3rem;
-  font:.76rem/1.3 ui-sans-serif, sans-serif; }
-.date { color:var(--accent); font-weight:600; white-space:nowrap; }
-.sep { color:var(--faint); }
-.src { color:var(--muted); }
-.tag { font:700 .6rem/1 ui-sans-serif, sans-serif; text-transform:uppercase; letter-spacing:.05em;
-  background:#9a6700; color:#fff; padding:.12rem .35rem; border-radius:.25rem; margin-right:.4rem;
-  vertical-align:.05em; }
+ul.items > li { display:grid; grid-template-columns:74px 1fr; gap:16px; align-items:baseline; padding:13px 0; border-bottom:1px solid var(--line); }
+ul.items > li:hover { border-color:var(--line-2); }
+.row-date { font:500 11.5px/1.5 var(--mono); color:var(--muted); white-space:nowrap; padding-top:1px; }
+.row-date.none { color:var(--faint); }
+.row-main { min-width:0; }
+.row-title { font:500 15.5px/1.45 var(--sans); color:var(--ink); transition:.12s; }
+li:hover .row-title { color:#fff; }
+.row-title:hover { color:var(--signal); }
+.row-meta { display:flex; align-items:center; gap:9px; margin-top:6px; font:500 11.5px/1 var(--mono); color:var(--muted); flex-wrap:wrap; }
+.row-meta .src-name { color:var(--faint); }
+.badge { display:inline-flex; align-items:center; font:700 9px/1 var(--mono); text-transform:uppercase; letter-spacing:.1em; padding:3px 6px; border-radius:4px; vertical-align:1px; }
+.badge.new { color:var(--signal); border:1px solid var(--signal-dim); background:var(--signal-glow); }
+.badge.upd { color:var(--amber); border:1px solid rgba(233,162,59,.4); background:rgba(233,162,59,.1); }
 
-.theme { margin-bottom:.5rem; }
-.theme h3 { display:flex; align-items:center; gap:.5rem; }
-.theme-icon { font-size:1.15rem; }
-.theme-count { margin-left:auto; font:600 .75rem/1 ui-sans-serif, sans-serif; color:var(--muted);
-  background:var(--chip); border:1px solid var(--line); border-radius:999px; padding:.12rem .5rem; }
-.more { margin:.5rem 0 0; }
-.more summary { cursor:pointer; color:var(--accent); font:600 .82rem/1 ui-sans-serif, sans-serif;
-  padding:.4rem 0; list-style:none; }
+.more { margin-top:6px; }
+.more summary { cursor:pointer; list-style:none; font:600 12px/1 var(--mono); color:var(--muted); padding:11px 0; display:inline-flex; align-items:center; gap:8px; transition:.15s; }
+.more summary:hover { color:var(--ink); }
 .more summary::-webkit-details-marker { display:none; }
-.more summary::before { content:"▸ "; }
-.more[open] summary::before { content:"▾ "; }
+.more summary .chev { color:var(--signal); transition:transform .2s; display:inline-block; }
+.more[open] summary .chev { transform:rotate(90deg); }
 
-/* sources + archive */
-.src-list, .arc-list { list-style:none; margin:0; padding:0; }
-.src-row, .arc-list li { display:flex; justify-content:space-between; gap:1rem; padding:.55rem 0;
-  border-bottom:1px solid var(--line); font:.88rem/1.4 ui-sans-serif, sans-serif; }
-.src-note, .arc-counts { color:var(--muted); }
-.src-row.err { color:var(--accent); }
-.empty { color:var(--muted); }
-.foot { text-align:center; color:var(--faint); font:.76rem/1.5 ui-sans-serif, sans-serif;
-  padding:2rem 1.25rem; border-top:1px solid var(--line); }
+.src-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(310px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+.src-cell { background:var(--panel); padding:16px 18px; display:flex; align-items:center; gap:13px; transition:.15s; }
+.src-cell:hover { background:var(--panel-2); }
+.src-cell .sdot { width:9px; height:9px; border-radius:50%; flex:0 0 9px; }
+.src-cell .sdot.active { background:var(--aurora-1); box-shadow:0 0 9px rgba(51,230,176,.5); }
+.src-cell .sdot.idle { background:var(--faint); }
+.src-cell .sdot.hot { background:var(--signal); box-shadow:0 0 9px var(--signal-glow); }
+.src-cell .sname { font:500 13px/1.3 var(--sans); color:var(--ink-2); }
+.src-cell .snote { margin-left:auto; font:600 11px/1 var(--mono); white-space:nowrap; }
+.src-cell .snote.has { color:var(--signal); }
+.src-cell .snote.no { color:var(--faint); }
+
+footer.foot { margin-top:64px; border-top:1px solid var(--line); padding:34px 0 60px; }
+.foot-grid { display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; align-items:flex-start; }
+.foot-col { flex:1 1 220px; min-width:200px; }
+.foot-col h4 { font:600 11px/1 var(--mono); text-transform:uppercase; letter-spacing:.16em; color:var(--muted); margin:0 0 12px; }
+.foot-col p { margin:0; max-width:46ch; color:var(--faint); font:400 13.5px/1.6 var(--sans); }
+.foot-col a.fl { display:block; white-space:nowrap; font:500 13px/1.9 var(--mono); color:var(--ink-2); transition:.12s; }
+.foot-col a.fl:hover { color:var(--signal); }
+.foot-bottom { margin-top:30px; display:flex; gap:14px; align-items:center; font:500 11.5px/1.6 var(--mono); color:var(--faint); flex-wrap:wrap; }
+.foot-bottom .sep { opacity:.5; }
+
+@media (max-width:860px){ .readout { grid-template-columns:repeat(2,1fr); } .metric:nth-child(5){ grid-column:1 / -1; } .sb-meta { display:none; } }
+@media (max-width:560px){ .wrap { padding:0 18px; } .hide-sm { display:none; } ul.items > li { grid-template-columns:1fr; gap:6px; } .row-date { padding-top:0; } }
+@media (prefers-reduced-motion:reduce){ *, *::before { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
 </style>
 </head>
 <body>
-<header class="masthead">
-  <div class="brand">North<span>Signal</span></div>
-  <p class="tagline">Canada's AI policy, funding &amp; RFP tracker — what changed, every issue.</p>
-</header>
-<main>
-<section class="issue">
-  <div class="issue-head">
-    <span class="kicker">Latest issue</span>
-    <h1>2026-06-05</h1>
-    <div class="stats">
-      <div class="stat"><span class="num">90</span><span class="lbl">new</span></div>
-      <div class="stat"><span class="num">0</span><span class="lbl">updated</span></div>
-      <div class="stat"><span class="num">6</span><span class="lbl">themes</span></div>
-      <div class="stat"><span class="num">6</span><span class="lbl">sources</span></div>
+<div class="statusbar"><div class="wrap">
+    <a class="logo" href="#top" aria-label="NorthSignal">
+      <svg class="mark" viewBox="0 0 22 22" fill="none" aria-hidden="true">
+        <path d="M11 1 L20.5 19 H1.5 Z" stroke="#ff4632" stroke-width="1.6" stroke-linejoin="round"/>
+        <path d="M11 7 L16 17 H6 Z" fill="#ff4632"/>
+      </svg>
+      <span><b>North</b><span class="sig">Signal</span></span>
+    </a>
+    <div class="sb-meta hide-sm">
+      <span class="sb-item"><span class="k">ISSUE</span><span class="v">2026-06-05</span></span>
+      <span class="sb-item"><span class="k">CADENCE</span><span class="v">BIMONTHLY</span></span>
+      <span class="sb-item"><span class="dot live"></span><span class="v">LIVE</span><span class="k" id="sb-clock">--:--:-- UTC</span></span>
     </div>
-  </div>
-  <section class="summary">
-    <h2>Summary</h2>
-    <div class="chips"><a class="chip" href="#theme-health">
-        <span class="chip-icon">🏥</span>Health &amp; Life Sciences
-        <span class="chip-count">5</span></a><a class="chip" href="#theme-talent">
-        <span class="chip-icon">🎓</span>Talent, Skills &amp; Literacy
-        <span class="chip-count">16</span></a><a class="chip" href="#theme-partnerships">
-        <span class="chip-icon">🤝</span>Partnerships &amp; Global
-        <span class="chip-count">12</span></a><a class="chip" href="#theme-policy">
-        <span class="chip-icon">🛡️</span>Policy, Safety &amp; Strategy
-        <span class="chip-count">5</span></a><a class="chip" href="#theme-funding">
-        <span class="chip-icon">💰</span>Funding &amp; Investment
-        <span class="chip-count">24</span></a><a class="chip" href="#theme-other">
-        <span class="chip-icon">📰</span>Other Updates
-        <span class="chip-count">28</span></a></div>
-    <div class="highlights">
-        <h3>Money on the move</h3>
-        <ul class="cards"><li class="card">
-    <a class="t" href="https://www.amii.ca/updates-insights/canada-builds-on-its-ai-research-strength">Canada builds on its AI research strength with $24M investment in 42 CIFAR AI Chairs</a>
-    <div class="m"><span class="date">May 22, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
-  </li><li class="card">
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-launches-10m-health-innovation-lab">Amii Launches $10M Health Innovation Lab to Build the Future of AI-Enabled Healthcare</a>
-    <div class="m"><span class="date">May 20, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
-  </li><li class="card">
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-quebec/">SCALE AI Announces More Than $73 M in New Investments for High-Impact AI Projects Across Québec</a>
-    <div class="m"><span class="date">Dec 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
-  </li><li class="card">
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-toronto/">Record-Breaking SCALE AI Funding Round of Nearly $129M to Drive Canada’s Competitiveness with Homegrown AI</a>
-    <div class="m"><span class="date">Dec 16, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
-  </li></ul>
-      </div>
+    <div class="sb-right">
+      <a class="sb-link hide-sm" href="#themes">Themes</a>
+      <a class="sb-link hide-sm" href="#sources">Sources</a>
+      <a class="sb-link" href="https://github.com/egypationgodbill/Random-ideas" target="_blank" rel="noopener">GitHub</a>
+      <a class="mcp-pill" href="#mcp" title="Model Context Protocol endpoint — coming soon">MCP <span class="soon">soon</span></a>
+    </div>
+  </div></div>
+  <div class="aurora"></div>
+<a id="top"></a>
+<header class="hero"><div class="wrap">
+    <div class="hero-top">
+      <span class="kicker">What changed this issue</span>
+      <span class="issue-tag">ISSUE · 2026-06-05</span>
+    </div>
+    <h1 class="headline">Canada's AI funding, <em>tracked by the diff.</em></h1>
+    <p class="lede">First snapshot of the cycle — <b>90 fresh items</b> across <b>6 official sources</b>, 22 of them carrying a dollar figure. Nothing updated yet: this issue sets the baseline every future diff is measured against.</p>
+    <div class="readout"><div class="metric hot">
+      <span class="spark">▲</span>
+      <div class="num"><span class="cval" data-target="90">90</span></div>
+      <div class="lbl">New items</div>
+    </div><div class="metric">
+      
+      <div class="num"><span class="cval" data-target="0">0</span></div>
+      <div class="lbl">Updated</div>
+    </div><div class="metric">
+      
+      <div class="num"><span class="cval" data-target="6">6</span></div>
+      <div class="lbl">Themes</div>
+    </div><div class="metric">
+      
+      <div class="num"><span class="cval" data-target="6">6</span></div>
+      <div class="lbl">Sources</div>
+    </div><div class="metric hot">
+      <span class="spark">$</span>
+      <div class="num"><span class="cval" data-target="22">22</span></div>
+      <div class="lbl">Money flags</div>
+    </div></div>
+  </div></header>
+<main>
+<section class="block wrap" id="dist-block">
+    <div class="block-head"><h2>Theme distribution</h2><span class="rule"></span><span class="count">90 items</span></div>
+    <div class="dist"><div class="dist-bar"><div class="dist-seg" data-key="health" data-grow="5"
+        style="background:#33e6b0;flex-grow:5"
+        title="Health &amp; Life Sciences — 5 (6%)"></div><div class="dist-seg" data-key="talent" data-grow="16"
+        style="background:#4aa6ff;flex-grow:16"
+        title="Talent, Skills &amp; Literacy — 16 (18%)"><span class="seg-pct">18%</span></div><div class="dist-seg" data-key="partnerships" data-grow="12"
+        style="background:#b070ff;flex-grow:12"
+        title="Partnerships &amp; Global — 12 (13%)"><span class="seg-pct">13%</span></div><div class="dist-seg" data-key="policy" data-grow="5"
+        style="background:#e9a23b;flex-grow:5"
+        title="Policy, Safety &amp; Strategy — 5 (6%)"></div><div class="dist-seg" data-key="funding" data-grow="24"
+        style="background:#ff4632;flex-grow:24"
+        title="Funding &amp; Investment — 24 (27%)"><span class="seg-pct">27%</span></div><div class="dist-seg" data-key="other" data-grow="28"
+        style="background:#8e979c;flex-grow:28"
+        title="Other Updates — 28 (31%)"><span class="seg-pct">31%</span></div></div><div class="dist-legend"><div class="leg" data-key="health"><span class="sw" style="background:#33e6b0"></span>Health &amp; Life Sciences <span class="lc">5</span></div><div class="leg" data-key="talent"><span class="sw" style="background:#4aa6ff"></span>Talent, Skills &amp; Literacy <span class="lc">16</span></div><div class="leg" data-key="partnerships"><span class="sw" style="background:#b070ff"></span>Partnerships &amp; Global <span class="lc">12</span></div><div class="leg" data-key="policy"><span class="sw" style="background:#e9a23b"></span>Policy, Safety &amp; Strategy <span class="lc">5</span></div><div class="leg" data-key="funding"><span class="sw" style="background:#ff4632"></span>Funding &amp; Investment <span class="lc">24</span></div><div class="leg" data-key="other"><span class="sw" style="background:#8e979c"></span>Other Updates <span class="lc">28</span></div></div></div>
   </section>
-  <section class="themes"><h2>By theme</h2><div class="theme" id="theme-health">
-      <h3><span class="theme-icon">🏥</span>Health &amp; Life Sciences
-        <span class="theme-count">5</span></h3>
+<section class="block wrap" id="money-block">
+    <div class="block-head"><h2>Money on the move</h2><span class="rule"></span><span class="count">22 items flag a $ figure</span></div>
+    <div class="cards"><a class="mcard" href="https://www.amii.ca/updates-insights/canada-builds-on-its-ai-research-strength" target="_blank" rel="noopener">
+      <div class="amt">$24M</div>
+      <div class="mt">Canada builds on its AI research strength with $24M investment in 42 CIFAR AI Chairs</div>
+      <div class="mm"><span>May 22, 2026</span><span class="sep">·</span><span>Amii — Latest</span></div>
+    </a><a class="mcard" href="https://www.amii.ca/updates-insights/amii-launches-10m-health-innovation-lab" target="_blank" rel="noopener">
+      <div class="amt">$10M</div>
+      <div class="mt">Amii Launches $10M Health Innovation Lab to Build the Future of AI-Enabled Healthcare</div>
+      <div class="mm"><span>May 20, 2026</span><span class="sep">·</span><span>Amii — Latest</span></div>
+    </a><a class="mcard" href="https://www.scaleai.ca/pancanadian-announcement-quebec/" target="_blank" rel="noopener">
+      <div class="amt">$73M</div>
+      <div class="mt">SCALE AI Announces More Than $73 M in New Investments for High-Impact AI Projects Across Québec</div>
+      <div class="mm"><span>Dec 17, 2025</span><span class="sep">·</span><span>Scale AI — News</span></div>
+    </a><a class="mcard" href="https://www.scaleai.ca/pancanadian-announcement-toronto/" target="_blank" rel="noopener">
+      <div class="amt">$129M</div>
+      <div class="mt">Record-Breaking SCALE AI Funding Round of Nearly $129M to Drive Canada’s Competitiveness with Homegrown AI</div>
+      <div class="mm"><span>Dec 16, 2025</span><span class="sep">·</span><span>Scale AI — News</span></div>
+    </a></div>
+  </section>
+<section class="block wrap" id="themes">
+    <div class="block-head"><h2>By theme</h2><span class="rule"></span><span class="count">90 items · 6 themes</span></div>
+    <div class="filters"><div class="fchip active" data-key="all">All <span class="fc">90</span></div><div class="fchip" data-key="health"><span class="ic">🏥</span>Health &amp; Life Sciences <span class="fc">5</span></div><div class="fchip" data-key="talent"><span class="ic">🎓</span>Talent, Skills &amp; Literacy <span class="fc">16</span></div><div class="fchip" data-key="partnerships"><span class="ic">🤝</span>Partnerships &amp; Global <span class="fc">12</span></div><div class="fchip" data-key="policy"><span class="ic">🛡️</span>Policy, Safety &amp; Strategy <span class="fc">5</span></div><div class="fchip" data-key="funding"><span class="ic">💰</span>Funding &amp; Investment <span class="fc">24</span></div><div class="fchip" data-key="other"><span class="ic">📰</span>Other Updates <span class="fc">28</span></div></div>
+    <div id="stream"><div class="theme-grp" data-key="health">
+      <h3><span class="accent" style="background:#33e6b0"></span><span class="ic">🏥</span>Health &amp; Life Sciences<span class="tc">5</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-launches-10m-health-innovation-lab">Amii Launches $10M Health Innovation Lab to Build the Future of AI-Enabled Healthcare</a>
-    <div class="m"><span class="date">May 20, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 20, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-launches-10m-health-innovation-lab" target="_blank" rel="noopener">Amii Launches $10M Health Innovation Lab to Build the Future of AI-Enabled Healthcare</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-healthcare-initiative-21-million/">SCALE AI’s AI for Healthcare Initiative: $21 million in investments supporting 9 AI projects for better healthcare in Canada</a>
-    <div class="m"><span class="date">Sep 27, 2023</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Sep 27, 2023</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-healthcare-initiative-21-million/" target="_blank" rel="noopener">SCALE AI’s AI for Healthcare Initiative: $21 million in investments supporting 9 AI projects for better healthcare in Canada</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/toboggan-labs-joins-milas-industry-partner-network-to-strengthen-healthcare-ai-capabilities">Toboggan Labs Joins Mila's Industry Partner Network to Strengthen Healthcare AI Capabilities</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/toboggan-labs-joins-milas-industry-partner-network-to-strengthen-healthcare-ai-capabilities" target="_blank" rel="noopener">Toboggan Labs Joins Mila's Industry Partner Network to Strengthen Healthcare AI Capabilities</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/tandemai-and-mila-announce-research-partnership-to-advance-ai-driven-drug-discovery-and-world">TandemAI and Mila Announce Research Partnership to Advance AI-Driven Drug Discovery and World Models</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/tandemai-and-mila-announce-research-partnership-to-advance-ai-driven-drug-discovery-and-world" target="_blank" rel="noopener">TandemAI and Mila Announce Research Partnership to Advance AI-Driven Drug Discovery and World Models</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://vectorinstitute.ai/a-strategic-blueprint-for-safe-health-ai-implementation-your-2026-roadmap/">A strategic blueprint for safe health AI implementation: Your 2026 roadmap</a>
-    <div class="m"><span class="src">Vector Institute — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://vectorinstitute.ai/a-strategic-blueprint-for-safe-health-ai-implementation-your-2026-roadmap/" target="_blank" rel="noopener">A strategic blueprint for safe health AI implementation: Your 2026 roadmap</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Vector Institute — News</span></div>
+    </div>
   </li></ul>
       
-    </div><div class="theme" id="theme-talent">
-      <h3><span class="theme-icon">🎓</span>Talent, Skills &amp; Literacy
-        <span class="theme-count">16</span></h3>
+    </div><div class="theme-grp" data-key="talent">
+      <h3><span class="accent" style="background:#4aa6ff"></span><span class="ic">🎓</span>Talent, Skills &amp; Literacy<span class="tc">16</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-launches-channel-partnership-with-u-of-alberta">Amii Launches Channel Partnership with University of Alberta to Scale Workforce-Ready AI Literacy</a>
-    <div class="m"><span class="date">May 22, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 22, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-launches-channel-partnership-with-u-of-alberta" target="_blank" rel="noopener">Amii Launches Channel Partnership with University of Alberta to Scale Workforce-Ready AI Literacy</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/canada-builds-on-its-ai-research-strength">Canada builds on its AI research strength with $24M investment in 42 CIFAR AI Chairs</a>
-    <div class="m"><span class="date">May 22, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 22, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/canada-builds-on-its-ai-research-strength" target="_blank" rel="noopener">Canada builds on its AI research strength with $24M investment in 42 CIFAR AI Chairs</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-and-the-u-of-a-complete-global-recruitment-ai-x-researchers">Amii and the University of Alberta Announce Completion of Global Recruitment for World-Leading ‘AI+X’ Researchers</a>
-    <div class="m"><span class="date">May 21, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 21, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-and-the-u-of-a-complete-global-recruitment-ai-x-researchers" target="_blank" rel="noopener">Amii and the University of Alberta Announce Completion of Global Recruitment for World-Leading ‘AI+X’ Researchers</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/closing-the-ai-literacy-divide-ub-aiwr">Closing the AI Literacy Divide: Amii Commissioned Research Calls for Alignment Between Higher Ed and Employer Skill Requirements</a>
-    <div class="m"><span class="date">May 21, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 21, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/closing-the-ai-literacy-divide-ub-aiwr" target="_blank" rel="noopener">Closing the AI Literacy Divide: Amii Commissioned Research Calls for Alignment Between Higher Ed and Employer Skill Requirements</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/AIWR-building-a-future-ready-workforce">Building a Future-Ready Workforce</a>
-    <div class="m"><span class="date">May 14, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 14, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/AIWR-building-a-future-ready-workforce" target="_blank" rel="noopener">Building a Future-Ready Workforce</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-partners-with-alberta-government-to-bring-ai-literacy-to-k-12-classrooms">Amii Partners with Alberta Government to Bring AI Literacy to K-12 Classrooms</a>
-    <div class="m"><span class="date">Apr 29, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Apr 29, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-partners-with-alberta-government-to-bring-ai-literacy-to-k-12-classrooms" target="_blank" rel="noopener">Amii Partners with Alberta Government to Bring AI Literacy to K-12 Classrooms</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-launches-call-for-projects-to-support-youth-training-in-stem-fields/">Scale AI launches a nationwide call for projects to support youth training in STEM fields</a>
-    <div class="m"><span class="date">Mar 19, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Mar 19, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-launches-call-for-projects-to-support-youth-training-in-stem-fields/" target="_blank" rel="noopener">Scale AI launches a nationwide call for projects to support youth training in STEM fields</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-launches-its-new-workforce-training-program-to-empower-canadas-workforce-in-digital-intelligence/">Scale AI Launches Its New Workforce Training Program to Empower Canada’s Workforce in Digital Intelligence</a>
-    <div class="m"><span class="date">Mar 25, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Mar 25, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-launches-its-new-workforce-training-program-to-empower-canadas-workforce-in-digital-intelligence/" target="_blank" rel="noopener">Scale AI Launches Its New Workforce Training Program to Empower Canada’s Workforce in Digital Intelligence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li></ul>
-      <details class="more"><summary>8 more</summary>
-        <ul class="items"><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-four-new-ai-research-chairsthat-will-undoubtedly-stimulate-artificial-intelligence-innovation-in-canada/">Scale AI announces four new AI research chairs that will undoubtedly stimulate artificial intelligence innovation in Canada</a>
-    <div class="m"><span class="date">Dec 14, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+      <details class="more"><summary><span class="chev">▸</span> Show 8 more</summary><ul class="items"><li>
+    <div class="row-date">Dec 14, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-four-new-ai-research-chairsthat-will-undoubtedly-stimulate-artificial-intelligence-innovation-in-canada/" target="_blank" rel="noopener">Scale AI announces four new AI research chairs that will undoubtedly stimulate artificial intelligence innovation in Canada</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-builds-on-research-and-talents-with-the-launch-of-three-new-ai-research-chairs-in-canada/">Scale AI builds on research and talents with the launch of three new AI research chairs in Canada</a>
-    <div class="m"><span class="date">Jun 15, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 15, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-builds-on-research-and-talents-with-the-launch-of-three-new-ai-research-chairs-in-canada/" target="_blank" rel="noopener">Scale AI builds on research and talents with the launch of three new AI research chairs in Canada</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-enhances-its-training-support-programs-to-spur-the-integration-of-ai-in-companies/">Scale AI enhances its training support programs to spur the integration of AI in companies</a>
-    <div class="m"><span class="date">Feb 22, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 22, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-enhances-its-training-support-programs-to-spur-the-integration-of-ai-in-companies/" target="_blank" rel="noopener">Scale AI enhances its training support programs to spur the integration of AI in companies</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/customized-ai-training-to-improve-company-productivity/">Customized AI training to improve company productivity</a>
-    <div class="m"><span class="date">Nov 6, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Nov 6, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/customized-ai-training-to-improve-company-productivity/" target="_blank" rel="noopener">Customized AI training to improve company productivity</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-invests-to-support-ai-workforce-training-for-canadian-industries/">Scale AI invests to support AI workforce training for Canadian industries</a>
-    <div class="m"><span class="date">Jun 22, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 22, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-invests-to-support-ai-workforce-training-for-canadian-industries/" target="_blank" rel="noopener">Scale AI invests to support AI workforce training for Canadian industries</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/the-quebec-government-awards-23-4-million-to-scale-ai-for-the-development-of-ai-talents/">The Québec government awards $23.4 million to Scale AI for the development of AI talents</a>
-    <div class="m"><span class="date">Jul 15, 2019</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jul 15, 2019</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/the-quebec-government-awards-23-4-million-to-scale-ai-for-the-development-of-ai-talents/" target="_blank" rel="noopener">The Québec government awards $23.4 million to Scale AI for the development of AI talents</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/mila-celebrates-seventeen-recipients-of-the-2026-edi-scholarships-program">Mila Celebrates Seventeen Recipients of the 2026 EDI Scholarships Program</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/mila-celebrates-seventeen-recipients-of-the-2026-edi-scholarships-program" target="_blank" rel="noopener">Mila Celebrates Seventeen Recipients of the 2026 EDI Scholarships Program</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://vectorinstitute.ai/vector-institute-awards-100-scholarships-to-ontarios-top-ai-graduate-students/">Vector Institute awards 100 scholarships to Ontario’s top AI graduate students</a>
-    <div class="m"><span class="src">Vector Institute — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://vectorinstitute.ai/vector-institute-awards-100-scholarships-to-ontarios-top-ai-graduate-students/" target="_blank" rel="noopener">Vector Institute awards 100 scholarships to Ontario’s top AI graduate students</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Vector Institute — News</span></div>
+    </div>
   </li></ul></details>
-    </div><div class="theme" id="theme-partnerships">
-      <h3><span class="theme-icon">🤝</span>Partnerships &amp; Global
-        <span class="theme-count">12</span></h3>
+    </div><div class="theme-grp" data-key="partnerships">
+      <h3><span class="accent" style="background:#b070ff"></span><span class="ic">🤝</span>Partnerships &amp; Global<span class="tc">12</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.scaleai.ca/canadas-ai-and-tech-at-vivatech-2026/">Canada’s AI and Tech: Converting Leadership into Strategic Partnerships at VivaTech 2026</a>
-    <div class="m"><span class="date">Mar 26, 2026</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Mar 26, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/canadas-ai-and-tech-at-vivatech-2026/" target="_blank" rel="noopener">Canada’s AI and Tech: Converting Leadership into Strategic Partnerships at VivaTech 2026</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-to-lead-delegation-to-the-2026-world-governments-summit/">SCALE AI to Lead Canada’s AI and Technology Delegation to the 2026 World Governments Summit in Dubai</a>
-    <div class="m"><span class="date">Feb 2, 2026</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 2, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-to-lead-delegation-to-the-2026-world-governments-summit/" target="_blank" rel="noopener">SCALE AI to Lead Canada’s AI and Technology Delegation to the 2026 World Governments Summit in Dubai</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/canadian-ai-for-the-public-services/">Canadian AI for The Public Services at Dubai’s World Governments Summit in a Mission Led by Scale AI</a>
-    <div class="m"><span class="date">Jan 21, 2026</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jan 21, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/canadian-ai-for-the-public-services/" target="_blank" rel="noopener">Canadian AI for The Public Services at Dubai’s World Governments Summit in a Mission Led by Scale AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/vivatech-2025-canadas-ai-is-open-for-business/">VivaTech 2025: Canada’s AI is Open for Business</a>
-    <div class="m"><span class="date">Jun 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 17, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/vivatech-2025-canadas-ai-is-open-for-business/" target="_blank" rel="noopener">VivaTech 2025: Canada’s AI is Open for Business</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/over-500-canadian-tech-leaders-at-vivatech-2025/">Over 500 Canadian Tech Leaders at VivaTech 2025</a>
-    <div class="m"><span class="date">Apr 3, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 3, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/over-500-canadian-tech-leaders-at-vivatech-2025/" target="_blank" rel="noopener">Over 500 Canadian Tech Leaders at VivaTech 2025</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/canada-at-vivatech-2025-scale-ai-launches-a-call-for-applications-to-join-the-official-delegation/">Canada at VivaTech 2025: Scale AI Launches a Call for Applications to Join the Official Delegation</a>
-    <div class="m"><span class="date">Feb 4, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 4, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/canada-at-vivatech-2025-scale-ai-launches-a-call-for-applications-to-join-the-official-delegation/" target="_blank" rel="noopener">Canada at VivaTech 2025: Scale AI Launches a Call for Applications to Join the Official Delegation</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/record-breaking-delegation-canada-ai-vivatech-2024/">Record-Breaking 60-Member Delegation to Showcase Canadian AI Excellence at VivaTech 2024, Europe’s Largest Tech Event</a>
-    <div class="m"><span class="date">Apr 11, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 11, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/record-breaking-delegation-canada-ai-vivatech-2024/" target="_blank" rel="noopener">Record-Breaking 60-Member Delegation to Showcase Canadian AI Excellence at VivaTech 2024, Europe’s Largest Tech Event</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/ai-delegation-vivatech-2024/">The AI Ecosystem at VivaTech 2024: Scale AI launches a call for applications for Canadian AI suppliers</a>
-    <div class="m"><span class="date">Feb 2, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 2, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/ai-delegation-vivatech-2024/" target="_blank" rel="noopener">The AI Ecosystem at VivaTech 2024: Scale AI launches a call for applications for Canadian AI suppliers</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li></ul>
-      <details class="more"><summary>4 more</summary>
-        <ul class="items"><li>
-    <a class="t" href="https://mila.quebec/en/news/roost-and-mila-announce-partnership-to-advance-open-source-ai-safety-starting-with-youth">ROOST and Mila Announce Partnership to Advance Open Source AI Safety, Starting with Youth Safety</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+      <details class="more"><summary><span class="chev">▸</span> Show 4 more</summary><ul class="items"><li>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/roost-and-mila-announce-partnership-to-advance-open-source-ai-safety-starting-with-youth" target="_blank" rel="noopener">ROOST and Mila Announce Partnership to Advance Open Source AI Safety, Starting with Youth Safety</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/cohere-and-mila-partner-to-advance-quebec-french-language-and-cultural-context-in-ai">Cohere and Mila Partner to Advance Quebec French Language and Cultural Context in AI</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/cohere-and-mila-partner-to-advance-quebec-french-language-and-cultural-context-in-ai" target="_blank" rel="noopener">Cohere and Mila Partner to Advance Quebec French Language and Cultural Context in AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/torc-robotics-partners-with-mila-in-institutes-first-ever-autonomous-trucking-collaboration-to">Torc Robotics Partners with Mila in Institute's First-Ever Autonomous-Trucking Collaboration to Advance Physical AI</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/torc-robotics-partners-with-mila-in-institutes-first-ever-autonomous-trucking-collaboration-to" target="_blank" rel="noopener">Torc Robotics Partners with Mila in Institute's First-Ever Autonomous-Trucking Collaboration to Advance Physical AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/mila-and-sustainable-ai-group-join-forces-to-advance-environmentally-responsible-ai">Mila and Sustainable AI Group Join Forces to Advance Environmentally Responsible AI</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/mila-and-sustainable-ai-group-join-forces-to-advance-environmentally-responsible-ai" target="_blank" rel="noopener">Mila and Sustainable AI Group Join Forces to Advance Environmentally Responsible AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li></ul></details>
-    </div><div class="theme" id="theme-policy">
-      <h3><span class="theme-icon">🛡️</span>Policy, Safety &amp; Strategy
-        <span class="theme-count">5</span></h3>
+    </div><div class="theme-grp" data-key="policy">
+      <h3><span class="accent" style="background:#e9a23b"></span><span class="ic">🛡️</span>Policy, Safety &amp; Strategy<span class="tc">5</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/ai-for-all-national-ai-strategy">AI for All: Canada's National AI Strategy</a>
-    <div class="m"><span class="date">Jun 4, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Jun 4, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/ai-for-all-national-ai-strategy" target="_blank" rel="noopener">AI for All: Canada's National AI Strategy</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-researchers-awarded-ai-alignment-project-research-grants-for-safer-trustworthy-ai">Amii researchers awarded AI Alignment Project research grants for safer, trustworthy AI</a>
-    <div class="m"><span class="date">Feb 19, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Feb 19, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-researchers-awarded-ai-alignment-project-research-grants-for-safer-trustworthy-ai" target="_blank" rel="noopener">Amii researchers awarded AI Alignment Project research grants for safer, trustworthy AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://ised-isde.canada.ca/site/ised/sites/default/files/documents/1001_01_26_ai_strategy_draft_june_4_en-125pm.pdf">Canada’s National Artificial Intelligence Strategy: AI for All (PDF, 2.37 MB)</a>
-    <div class="m"><span class="src">ISED — National AI Strategy (AI for All)</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://ised-isde.canada.ca/site/ised/sites/default/files/documents/1001_01_26_ai_strategy_draft_june_4_en-125pm.pdf" target="_blank" rel="noopener">Canada’s National Artificial Intelligence Strategy: AI for All (PDF, 2.37 MB)</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">ISED — National AI Strategy (AI for All)</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/canadas-national-ai-strategy-mila-welcomes-an-ambitious-vision-propelling-canada-toward">Canada’s National AI Strategy: Mila Welcomes an Ambitious Vision Propelling Canada Toward Scientific and Technological Leadership</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/canadas-national-ai-strategy-mila-welcomes-an-ambitious-vision-propelling-canada-toward" target="_blank" rel="noopener">Canada’s National AI Strategy: Mila Welcomes an Ambitious Vision Propelling Canada Toward Scientific and Technological Leadership</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://vectorinstitute.ai/hassan-ashtiani-building-trustworthy-ai-through-mathematical-foundations/">Hassan Ashtiani: Building trustworthy AI through mathematical foundations</a>
-    <div class="m"><span class="src">Vector Institute — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://vectorinstitute.ai/hassan-ashtiani-building-trustworthy-ai-through-mathematical-foundations/" target="_blank" rel="noopener">Hassan Ashtiani: Building trustworthy AI through mathematical foundations</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Vector Institute — News</span></div>
+    </div>
   </li></ul>
       
-    </div><div class="theme" id="theme-funding">
-      <h3><span class="theme-icon">💰</span>Funding &amp; Investment
-        <span class="theme-count">24</span></h3>
+    </div><div class="theme-grp" data-key="funding">
+      <h3><span class="accent" style="background:#ff4632"></span><span class="ic">💰</span>Funding &amp; Investment<span class="tc">24</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-manitoba/">SCALE AI Announces New Investments to Accelerate AI Adoption Across Manitoba</a>
-    <div class="m"><span class="date">Dec 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 17, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/pancanadian-announcement-manitoba/" target="_blank" rel="noopener">SCALE AI Announces New Investments to Accelerate AI Adoption Across Manitoba</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-quebec/">SCALE AI Announces More Than $73 M in New Investments for High-Impact AI Projects Across Québec</a>
-    <div class="m"><span class="date">Dec 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 17, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/pancanadian-announcement-quebec/" target="_blank" rel="noopener">SCALE AI Announces More Than $73 M in New Investments for High-Impact AI Projects Across Québec</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-bc/">SCALE AI Announces New Investments to Accelerate AI Adoption Across British Columbia</a>
-    <div class="m"><span class="date">Dec 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 17, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/pancanadian-announcement-bc/" target="_blank" rel="noopener">SCALE AI Announces New Investments to Accelerate AI Adoption Across British Columbia</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-alberta/">SCALE AI Announces New Investments to Accelerate AI Adoption Across Alberta</a>
-    <div class="m"><span class="date">Dec 17, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 17, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/pancanadian-announcement-alberta/" target="_blank" rel="noopener">SCALE AI Announces New Investments to Accelerate AI Adoption Across Alberta</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/pancanadian-announcement-toronto/">Record-Breaking SCALE AI Funding Round of Nearly $129M to Drive Canada’s Competitiveness with Homegrown AI</a>
-    <div class="m"><span class="date">Dec 16, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 16, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/pancanadian-announcement-toronto/" target="_blank" rel="noopener">Record-Breaking SCALE AI Funding Round of Nearly $129M to Drive Canada’s Competitiveness with Homegrown AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/100m-invested-in-23-new-projects-through-scale-ais-latest-funding-round/">Canada’s AI Adoption Accelerates, Driving Growth for Industries: Nearly $100M Invested in 23 New Projects Through SCALE AI’s Latest Funding Round</a>
-    <div class="m"><span class="date">Jul 10, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jul 10, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/100m-invested-in-23-new-projects-through-scale-ais-latest-funding-round/" target="_blank" rel="noopener">Canada’s AI Adoption Accelerates, Driving Growth for Industries: Nearly $100M Invested in 23 New Projects Through SCALE AI’s Latest Funding Round</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/30m-to-scale-canadas-ambition-in-ai/">$30M to Scale Canada’s Ambition in AI</a>
-    <div class="m"><span class="date">Apr 8, 2025</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 8, 2025</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/30m-to-scale-canadas-ambition-in-ai/" target="_blank" rel="noopener">$30M to Scale Canada’s Ambition in AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-with-more-than-96m-in-investments-supporting-22-ai-projects/">SCALE AI announces a major financing round with more than $96M in investments supporting 22 AI projects</a>
-    <div class="m"><span class="date">Jun 4, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 4, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-with-more-than-96m-in-investments-supporting-22-ai-projects/" target="_blank" rel="noopener">SCALE AI announces a major financing round with more than $96M in investments supporting 22 AI projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li></ul>
-      <details class="more"><summary>16 more</summary>
-        <ul class="items"><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-welcomes-the-historic-investment-in-artificial-intelligence-announced-by-the-government-of-canada-to-drive-economic-growth/">SCALE AI welcomes the historic investment in artificial intelligence announced by the Government of Canada to drive economic growth</a>
-    <div class="m"><span class="date">Apr 7, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+      <details class="more"><summary><span class="chev">▸</span> Show 16 more</summary><ul class="items"><li>
+    <div class="row-date">Apr 7, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-welcomes-the-historic-investment-in-artificial-intelligence-announced-by-the-government-of-canada-to-drive-economic-growth/" target="_blank" rel="noopener">SCALE AI welcomes the historic investment in artificial intelligence announced by the Government of Canada to drive economic growth</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-is-announcing-investments-of-more-than-20-million-in-5-ai-projects-for-intelligent-supply-chains/">SCALE AI is announcing investments of more than $20 million in 5 AI projects for intelligent supply chains</a>
-    <div class="m"><span class="date">Sep 28, 2023</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Sep 28, 2023</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-is-announcing-investments-of-more-than-20-million-in-5-ai-projects-for-intelligent-supply-chains/" target="_blank" rel="noopener">SCALE AI is announcing investments of more than $20 million in 5 AI projects for intelligent supply chains</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-propels-quebec-companies-with-support-for-ai-projects-totalling-nearly-40-million/">SCALE AI propels Québec companies with support for AI projects totalling nearly $40 million</a>
-    <div class="m"><span class="date">Apr 21, 2023</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 21, 2023</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-propels-quebec-companies-with-support-for-ai-projects-totalling-nearly-40-million/" target="_blank" rel="noopener">SCALE AI propels Québec companies with support for AI projects totalling nearly $40 million</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-record-breaking-financing-round-with-117m-in-investments-supporting-15-ai-projects/">SCALE AI announces record-breaking financing round with $117M in investments supporting 15 AI projects</a>
-    <div class="m"><span class="date">Feb 13, 2023</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 13, 2023</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-record-breaking-financing-round-with-117m-in-investments-supporting-15-ai-projects/" target="_blank" rel="noopener">SCALE AI announces record-breaking financing round with $117M in investments supporting 15 AI projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/ai-is-leading-the-way-for-more-efficient-and-resilient-supply-chains-in-canada-scale-ai-announces-25-million-for-6-ai-projects/">SCALE AI announces $25 million for 6 AI projects: AI is leading the way for more efficient and resilient supply chains in Canada</a>
-    <div class="m"><span class="date">Nov 14, 2022</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Nov 14, 2022</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/ai-is-leading-the-way-for-more-efficient-and-resilient-supply-chains-in-canada-scale-ai-announces-25-million-for-6-ai-projects/" target="_blank" rel="noopener">SCALE AI announces $25 million for 6 AI projects: AI is leading the way for more efficient and resilient supply chains in Canada</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-in-artificial-intelligence-50-million-to-support-12-new-projects/">SCALE AI announces a major financing round in artificial intelligence: $50 million to support 12 new projects</a>
-    <div class="m"><span class="date">Aug 22, 2022</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Aug 22, 2022</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-a-major-financing-round-in-artificial-intelligence-50-million-to-support-12-new-projects/" target="_blank" rel="noopener">SCALE AI announces a major financing round in artificial intelligence: $50 million to support 12 new projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/accelerating-the-integration-of-artificial-intelligence-solutions-scale-ai-announces-a-24-million-investment-in-5-new-projects/">Accelerating the integration of artificial intelligence solutions: Scale AI announces a $24-million investment in 5 new projects</a>
-    <div class="m"><span class="date">Apr 6, 2022</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 6, 2022</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/accelerating-the-integration-of-artificial-intelligence-solutions-scale-ai-announces-a-24-million-investment-in-5-new-projects/" target="_blank" rel="noopener">Accelerating the integration of artificial intelligence solutions: Scale AI announces a $24-million investment in 5 new projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-its-largest-financing-round-of-2021-with-twelve-projects-and-71-million-in-investments-in-artificial-intelligence/">Scale AI announces its largest financing round of 2021 with twelve projects and $71 million in investments in artificial intelligence</a>
-    <div class="m"><span class="date">Dec 8, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 8, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-its-largest-financing-round-of-2021-with-twelve-projects-and-71-million-in-investments-in-artificial-intelligence/" target="_blank" rel="noopener">Scale AI announces its largest financing round of 2021 with twelve projects and $71 million in investments in artificial intelligence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-supports-four-new-projects-and-reports-another-extraordinary-year-of-ai-investments-in-canada-for-a-total-impact-since-inception-of-more-than-200m/">Scale AI supports four new projects and reports another extraordinary year of AI investments in Canada, for a total impact since inception of more than $200M</a>
-    <div class="m"><span class="date">Jun 21, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 21, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-supports-four-new-projects-and-reports-another-extraordinary-year-of-ai-investments-in-canada-for-a-total-impact-since-inception-of-more-than-200m/" target="_blank" rel="noopener">Scale AI supports four new projects and reports another extraordinary year of AI investments in Canada, for a total impact since inception of more than $200M</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-five-projects-and-16-6-million-in-investments-in-artificial-intelligence/">Scale AI announces five projects and $16.6 million in investments in artificial intelligence</a>
-    <div class="m"><span class="date">Feb 18, 2021</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 18, 2021</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-five-projects-and-16-6-million-in-investments-in-artificial-intelligence/" target="_blank" rel="noopener">Scale AI announces five projects and $16.6 million in investments in artificial intelligence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-wants-to-encourage-vocations-and-is-investing-1-million-in-projects-to-raise-technology-and-digital-awareness/">Scale AI wants to encourage vocations and is investing $1 million in projects to raise technology and digital awareness</a>
-    <div class="m"><span class="date">Nov 17, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Nov 17, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-wants-to-encourage-vocations-and-is-investing-1-million-in-projects-to-raise-technology-and-digital-awareness/" target="_blank" rel="noopener">Scale AI wants to encourage vocations and is investing $1 million in projects to raise technology and digital awareness</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ais-acceleration-program-spreads-its-wings-projects-of-around-60-start-ups-validated-and-at-least-as-many-under-evaluation/">Scale AI’s Acceleration program spreads its wings: projects of around 60 start-ups validated and at least as many under evaluation</a>
-    <div class="m"><span class="date">Nov 10, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Nov 10, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ais-acceleration-program-spreads-its-wings-projects-of-around-60-start-ups-validated-and-at-least-as-many-under-evaluation/" target="_blank" rel="noopener">Scale AI’s Acceleration program spreads its wings: projects of around 60 start-ups validated and at least as many under evaluation</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/investments-of-29-million-scale-ai-advances-the-transition-to-ai-with-five-new-projects/">Investments of $29 million: Scale AI advances the transition to AI with five new projects</a>
-    <div class="m"><span class="date">Jul 21, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jul 21, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/investments-of-29-million-scale-ai-advances-the-transition-to-ai-with-five-new-projects/" target="_blank" rel="noopener">Investments of $29 million: Scale AI advances the transition to AI with five new projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/investments-of-75-million-scale-ai-propels-10-ai-projects/">Investments of $75 million: Scale AI propels 10 AI projects</a>
-    <div class="m"><span class="date">Jan 14, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jan 14, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/investments-of-75-million-scale-ai-propels-10-ai-projects/" target="_blank" rel="noopener">Investments of $75 million: Scale AI propels 10 AI projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/290-million-in-support-for-scale-ai-the-ai-powered-supply-chains-supercluster/">$290 million in support for Scale AI, the AI-Powered Supply Chains Supercluster</a>
-    <div class="m"><span class="date">Dec 6, 2018</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Dec 6, 2018</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/290-million-in-support-for-scale-ai-the-ai-powered-supply-chains-supercluster/" target="_blank" rel="noopener">$290 million in support for Scale AI, the AI-Powered Supply Chains Supercluster</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-the-ai-powered-supply-chain-supercluster-to-receive-funding-from-innovation-superclusters-initiative/">Scale AI, the AI-Powered Supply Chain Supercluster to Receive Funding from Innovation Superclusters Initiative</a>
-    <div class="m"><span class="date">Feb 15, 2018</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 15, 2018</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-the-ai-powered-supply-chain-supercluster-to-receive-funding-from-innovation-superclusters-initiative/" target="_blank" rel="noopener">Scale AI, the AI-Powered Supply Chain Supercluster to Receive Funding from Innovation Superclusters Initiative</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li></ul></details>
-    </div><div class="theme" id="theme-other">
-      <h3><span class="theme-icon">📰</span>Other Updates
-        <span class="theme-count">28</span></h3>
+    </div><div class="theme-grp" data-key="other">
+      <h3><span class="accent" style="background:#8e979c"></span><span class="ic">📰</span>Other Updates<span class="tc">28</span></h3>
       <ul class="items"><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/upper-bound-diary-why-canadian-creators-are-looking-for-canadian-ai">Upper Bound Diary: Why Canadian Creators are looking for Canadian AI</a>
-    <div class="m"><span class="date">May 22, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 22, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/upper-bound-diary-why-canadian-creators-are-looking-for-canadian-ai" target="_blank" rel="noopener">Upper Bound Diary: Why Canadian Creators are looking for Canadian AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/live-from-upper-bound-2026">Live from Upper Bound 2026</a>
-    <div class="m"><span class="date">May 20, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 20, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/live-from-upper-bound-2026" target="_blank" rel="noopener">Live from Upper Bound 2026</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/upper-bound-diary-reinforcement-learning-is-ready-for-the-spotlight">Upper Bound Diary: Reinforcement Learning is ready for the spotlight</a>
-    <div class="m"><span class="date">May 20, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 20, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/upper-bound-diary-reinforcement-learning-is-ready-for-the-spotlight" target="_blank" rel="noopener">Upper Bound Diary: Reinforcement Learning is ready for the spotlight</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/upperbound26-fuels-canada-s-ai-momentum">Amii Fuels Canada’s AI Momentum as Upper Bound Attendance Climbs 53% to 11,000</a>
-    <div class="m"><span class="date">May 15, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 15, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/upperbound26-fuels-canada-s-ai-momentum" target="_blank" rel="noopener">Amii Fuels Canada’s AI Momentum as Upper Bound Attendance Climbs 53% to 11,000</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/behind-the-scenes-of-upper-bound-with-stephanie-enders-approximately-correct-podcast">Behind the Scenes of Upper Bound With Stephanie Enders | Approximately Correct Podcast</a>
-    <div class="m"><span class="date">May 12, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">May 12, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/behind-the-scenes-of-upper-bound-with-stephanie-enders-approximately-correct-podcast" target="_blank" rel="noopener">Behind the Scenes of Upper Bound With Stephanie Enders | Approximately Correct Podcast</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/upper-bound-26-sold-out">Upper Bound Sells Out Ahead of Milestone Fifth Year</a>
-    <div class="m"><span class="date">Apr 30, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Apr 30, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/upper-bound-26-sold-out" target="_blank" rel="noopener">Upper Bound Sells Out Ahead of Milestone Fifth Year</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/icymi-amii-in-the-globe-mail-from-ai-curiosity-to-ai-confidence">ICYMI | Amii in The Globe &amp; Mail: From AI Curiosity to AI Confidence</a>
-    <div class="m"><span class="date">Apr 27, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Apr 27, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/icymi-amii-in-the-globe-mail-from-ai-curiosity-to-ai-confidence" target="_blank" rel="noopener">ICYMI | Amii in The Globe &amp; Mail: From AI Curiosity to AI Confidence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-research-at-iclr-2026-advancing-efficiency-in-reinforcement-learning-memory-systems-and-generative-ai">Amii Research at ICLR 2026: Advancing Efficiency in Reinforcement Learning, Memory Systems, and Generative AI</a>
-    <div class="m"><span class="date">Apr 23, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Apr 23, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-research-at-iclr-2026-advancing-efficiency-in-reinforcement-learning-memory-systems-and-generative-ai" target="_blank" rel="noopener">Amii Research at ICLR 2026: Advancing Efficiency in Reinforcement Learning, Memory Systems, and Generative AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li></ul>
-      <details class="more"><summary>20 more</summary>
-        <ul class="items"><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/building-on-the-foundations-technical-track">Building on the Foundations: Amii Launches AI Pathways Technical Track for Energy Professionals</a>
-    <div class="m"><span class="date">Apr 1, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+      <details class="more"><summary><span class="chev">▸</span> Show 20 more</summary><ul class="items"><li>
+    <div class="row-date">Apr 1, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/building-on-the-foundations-technical-track" target="_blank" rel="noopener">Building on the Foundations: Amii Launches AI Pathways Technical Track for Energy Professionals</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-welcomes-two-new-board-directors-peter-veer">Amii Welcomes Two New Board Directors</a>
-    <div class="m"><span class="date">Mar 24, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Mar 24, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-welcomes-two-new-board-directors-peter-veer" target="_blank" rel="noopener">Amii Welcomes Two New Board Directors</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/-keep-ai-weird-kate-compton-on-creativity-in-computing-approximately-correct-podcast">Keep AI Weird: Kate Compton on Creativity in Computing | Approximately Correct Podcast</a>
-    <div class="m"><span class="date">Mar 17, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Mar 17, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/-keep-ai-weird-kate-compton-on-creativity-in-computing-approximately-correct-podcast" target="_blank" rel="noopener">Keep AI Weird: Kate Compton on Creativity in Computing | Approximately Correct Podcast</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/chain-of-thought-explained-how-small-steps-help-llms-solve-big-problems">Chain of Thought Explained: How small steps help LLMs solve big problems</a>
-    <div class="m"><span class="date">Mar 9, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Mar 9, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/chain-of-thought-explained-how-small-steps-help-llms-solve-big-problems" target="_blank" rel="noopener">Chain of Thought Explained: How small steps help LLMs solve big problems</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/amii-monthly-news-february-2026">Amii Monthly News: February 2026</a>
-    <div class="m"><span class="date">Feb 26, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Feb 26, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/amii-monthly-news-february-2026" target="_blank" rel="noopener">Amii Monthly News: February 2026</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/meet-the-experts-AIforEarth">From Mars to Tornado Alley: Meet the Experts Joining Amii’s AI for Earth Program</a>
-    <div class="m"><span class="date">Feb 12, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Feb 12, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/meet-the-experts-AIforEarth" target="_blank" rel="noopener">From Mars to Tornado Alley: Meet the Experts Joining Amii’s AI for Earth Program</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/quebec-to-support-innovative-ai-projects-in-the-zone-economique-metropolitaine-zem/">Québec to support innovative AI projects across the Zone économique métropolitaine (ZEM)</a>
-    <div class="m"><span class="date">Feb 11, 2026</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Feb 11, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/quebec-to-support-innovative-ai-projects-in-the-zone-economique-metropolitaine-zem/" target="_blank" rel="noopener">Québec to support innovative AI projects across the Zone économique métropolitaine (ZEM)</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.amii.ca/updates-insights/what-wasps-can-teach-us-about-artificial-intelligence">What wasps can teach us about artificial intelligence</a>
-    <div class="m"><span class="date">Feb 10, 2026</span><span class="sep">·</span><span class="src">Amii — Latest</span></div>
+    <div class="row-date">Feb 10, 2026</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.amii.ca/updates-insights/what-wasps-can-teach-us-about-artificial-intelligence" target="_blank" rel="noopener">What wasps can teach us about artificial intelligence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Amii — Latest</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-launches-a-call-for-projects-in-generative-ai-for-canadian-industries/">Scale AI launches a call for projects in generative AI for Canadian industries</a>
-    <div class="m"><span class="date">Sep 26, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Sep 26, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-launches-a-call-for-projects-in-generative-ai-for-canadian-industries/" target="_blank" rel="noopener">Scale AI launches a call for projects in generative AI for Canadian industries</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-will-launch-a-call-for-projects-dedicated-to-generative-artificial-intelligence/">Scale AI to Launch a Call for Projects Focused on Generative Artificial Intelligence</a>
-    <div class="m"><span class="date">Sep 11, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Sep 11, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-will-launch-a-call-for-projects-dedicated-to-generative-artificial-intelligence/" target="_blank" rel="noopener">Scale AI to Launch a Call for Projects Focused on Generative Artificial Intelligence</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-unveils-enhanced-acceleration-program-to-propel-canadas-ai-startup-ecosystem/">Scale AI Unveils Enhanced Acceleration Program to Propel Canada’s AI Startup Ecosystem</a>
-    <div class="m"><span class="date">Apr 16, 2024</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Apr 16, 2024</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-unveils-enhanced-acceleration-program-to-propel-canadas-ai-startup-ecosystem/" target="_blank" rel="noopener">Scale AI Unveils Enhanced Acceleration Program to Propel Canada’s AI Startup Ecosystem</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-helping-to-fill-industry-demand-for-leading-edge-ai-research/">Scale AI helping to fill industry demand for leading edge AI research</a>
-    <div class="m"><span class="date">May 27, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">May 27, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-helping-to-fill-industry-demand-for-leading-edge-ai-research/" target="_blank" rel="noopener">Scale AI helping to fill industry demand for leading edge AI research</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/covid-19-scale-ai-snaps-into-action-and-funds-8-projects-to-help-canada-weather-the-crisis/">COVID-19 — Scale AI snaps into action and funds 8 projects to help Canada weather the crisis</a>
-    <div class="m"><span class="date">May 3, 2020</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">May 3, 2020</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/covid-19-scale-ai-snaps-into-action-and-funds-8-projects-to-help-canada-weather-the-crisis/" target="_blank" rel="noopener">COVID-19 — Scale AI snaps into action and funds 8 projects to help Canada weather the crisis</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/scale-ai-announces-the-selection-of-innovative-projects-in-artificial-intelligence-applied-to-supply-chains/">Scale AI announces the selection of innovative projects in artificial intelligence applied to supply chains</a>
-    <div class="m"><span class="date">Jun 27, 2019</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 27, 2019</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/scale-ai-announces-the-selection-of-innovative-projects-in-artificial-intelligence-applied-to-supply-chains/" target="_blank" rel="noopener">Scale AI announces the selection of innovative projects in artificial intelligence applied to supply chains</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/the-scale-ai-supercluster-and-industrialists-start-the-work-and-launch-their-call-for-projects/">The Scale AI supercluster and industrialists start the work and launch their call for projects</a>
-    <div class="m"><span class="date">Jun 4, 2019</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Jun 4, 2019</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/the-scale-ai-supercluster-and-industrialists-start-the-work-and-launch-their-call-for-projects/" target="_blank" rel="noopener">The Scale AI supercluster and industrialists start the work and launch their call for projects</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://www.scaleai.ca/ai-powered-supply-chains-supercluster-now-shortlisted/">AI-Powered Supply Chains Supercluster Now Shortlisted</a>
-    <div class="m"><span class="date">Oct 10, 2017</span><span class="sep">·</span><span class="src">Scale AI — News</span></div>
+    <div class="row-date">Oct 10, 2017</div>
+    <div class="row-main">
+      <a class="row-title" href="https://www.scaleai.ca/ai-powered-supply-chains-supercluster-now-shortlisted/" target="_blank" rel="noopener">AI-Powered Supply Chains Supercluster Now Shortlisted</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Scale AI — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/discover-the-third-cohort-of-indigenous-pathfinders-in-ai">Discover the Third Cohort of Indigenous Pathfinders in AI</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/discover-the-third-cohort-of-indigenous-pathfinders-in-ai" target="_blank" rel="noopener">Discover the Third Cohort of Indigenous Pathfinders in AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://mila.quebec/en/news/mila-and-cifar-launch-the-indigenous-ai-advisory-circle">Mila and CIFAR Launch the Indigenous AI Advisory Circle</a>
-    <div class="m"><span class="src">Mila — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://mila.quebec/en/news/mila-and-cifar-launch-the-indigenous-ai-advisory-circle" target="_blank" rel="noopener">Mila and CIFAR Launch the Indigenous AI Advisory Circle</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Mila — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://vectorinstitute.ai/mohamad-moosavi-accelerating-the-search-for-climate-solutions-with-ai/">Mohamad Moosavi: Accelerating the search for climate solutions with AI</a>
-    <div class="m"><span class="src">Vector Institute — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://vectorinstitute.ai/mohamad-moosavi-accelerating-the-search-for-climate-solutions-with-ai/" target="_blank" rel="noopener">Mohamad Moosavi: Accelerating the search for climate solutions with AI</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Vector Institute — News</span></div>
+    </div>
   </li><li>
-    <a class="t" href="https://vectorinstitute.ai/vector-researchers-advance-representation-learning-and-deep-learning-research-at-iclr-2026/">Vector researchers advance representation learning and deep learning research at ICLR 2026</a>
-    <div class="m"><span class="src">Vector Institute — News</span></div>
+    <div class="row-date none">— — —</div>
+    <div class="row-main">
+      <a class="row-title" href="https://vectorinstitute.ai/vector-researchers-advance-representation-learning-and-deep-learning-research-at-iclr-2026/" target="_blank" rel="noopener">Vector researchers advance representation learning and deep learning research at ICLR 2026</a>
+      <div class="row-meta"><span class="badge new">new</span><span class="src-name">Vector Institute — News</span></div>
+    </div>
   </li></ul></details>
-    </div></section>
-  <section class="sources">
-    <h2>Sources</h2>
-    <ul class="src-list"><li class="src-row"><span>ISED — National AI Strategy (AI for All)</span><span class="src-note">1 new/updated</span></li><li class="src-row"><span>ISED — Newsroom</span><span class="src-note">no change</span></li><li class="src-row"><span>Scale AI — News</span><span class="src-note">50 new/updated</span></li><li class="src-row"><span>Mila — News</span><span class="src-note">10 new/updated</span></li><li class="src-row"><span>Vector Institute — News</span><span class="src-note">5 new/updated</span></li><li class="src-row"><span>Amii — Latest</span><span class="src-note">24 new/updated</span></li></ul>
+    </div></div>
   </section>
-</section>
+<section class="block wrap" id="sources">
+    <div class="block-head"><h2>Source health</h2><span class="rule"></span><span class="count">6 polled</span></div>
+    <div class="src-grid"><div class="src-cell"><span class="sdot active"></span><span class="sname">ISED — National AI Strategy (AI for All)</span><span class="snote has">1 new/updated</span></div><div class="src-cell"><span class="sdot idle"></span><span class="sname">ISED — Newsroom</span><span class="snote no">no change</span></div><div class="src-cell"><span class="sdot hot"></span><span class="sname">Scale AI — News</span><span class="snote has">50 new/updated</span></div><div class="src-cell"><span class="sdot active"></span><span class="sname">Mila — News</span><span class="snote has">10 new/updated</span></div><div class="src-cell"><span class="sdot active"></span><span class="sname">Vector Institute — News</span><span class="snote has">5 new/updated</span></div><div class="src-cell"><span class="sdot hot"></span><span class="sname">Amii — Latest</span><span class="snote has">24 new/updated</span></div></div>
+  </section>
 </main>
-<footer class="foot">Generated by NorthSignal · sources are official Canadian gov &amp; institute pages</footer>
+<footer class="foot"><div class="wrap">
+    <div class="foot-grid">
+      <div class="foot-col"><h4>NorthSignal</h4>
+        <p>A bimonthly tracker for Canada's AI policy, funding programs &amp; RFPs. It scrapes official sources, diffs each run against the last snapshot, and surfaces only <b style="color:var(--ink-2)">what changed</b>.</p></div>
+      <div class="foot-col" id="mcp"><h4>For agents</h4>
+        <p>An <span style="color:var(--aurora-1)">MCP</span> endpoint is coming — so coding agents and research assistants can query each issue's diff directly. No signup, no scraping.</p></div>
+      <div class="foot-col"><h4>Links</h4>
+        <a class="fl" href="https://github.com/egypationgodbill/Random-ideas" target="_blank" rel="noopener">→ GitHub repo</a>
+        <a class="fl" href="#sources">→ Tracked sources</a>
+        <a class="fl" href="#top">→ Latest issue</a></div>
+    </div>
+    <div class="foot-bottom">
+      <span>Generated by NorthSignal</span><span class="sep">/</span>
+      <span>Sources are official Canadian gov &amp; institute pages</span><span class="sep">/</span>
+      <span>Issue 2026-06-05</span>
+    </div>
+  </div></footer>
+<script>(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // live UTC clock
+  var clock = document.getElementById('sb-clock');
+  function pad(n){ return String(n).padStart(2,'0'); }
+  function tick(){ if(!clock) return; var d=new Date();
+    clock.textContent = pad(d.getUTCHours())+':'+pad(d.getUTCMinutes())+':'+pad(d.getUTCSeconds())+' UTC'; }
+  tick(); setInterval(tick,1000);
+
+  // count-up metrics (re-animate from 0 to the server-rendered value)
+  function countUp(node,target){
+    target = Number(target)||0;
+    if(reduce || target===0){ node.textContent = target; return; }
+    var dur=1100, steps=34, i=0;
+    node.textContent='0';
+    var id=setInterval(function(){ i++; var k=i/steps; var e=1-Math.pow(1-k,3);
+      node.textContent=Math.round(target*e);
+      if(i>=steps){ node.textContent=target; clearInterval(id); } }, dur/steps);
+    setTimeout(function(){ node.textContent=target; clearInterval(id); }, dur+250);
+  }
+  [].forEach.call(document.querySelectorAll('.cval'), function(n){ countUp(n, n.getAttribute('data-target')); });
+
+  // distribution bar grow-in
+  if(!reduce){
+    var segs=document.querySelectorAll('.dist-seg');
+    [].forEach.call(segs, function(s){ s.style.flexGrow='0'; });
+    requestAnimationFrame(function(){ requestAnimationFrame(function(){
+      [].forEach.call(segs, function(s){ s.style.flexGrow=s.getAttribute('data-grow'); }); }); });
+    setTimeout(function(){ [].forEach.call(segs, function(s){ s.style.flexGrow=s.getAttribute('data-grow'); }); }, 900);
+  }
+
+  // theme filtering (chips + distribution segments + legend)
+  var filters=document.querySelector('.filters');
+  function filterTo(key){
+    if(filters){ [].forEach.call(filters.children, function(c){
+      c.classList.toggle('active', c.getAttribute('data-key')===key); }); }
+    [].forEach.call(document.querySelectorAll('.theme-grp'), function(g){
+      g.classList.toggle('dim', !(key==='all' || g.getAttribute('data-key')===key)); });
+    if(key!=='all'){
+      var el=document.querySelector('.theme-grp[data-key="'+key+'"]');
+      if(el){ var y=el.getBoundingClientRect().top+window.scrollY-80;
+        window.scrollTo({ top:y, behavior: reduce?'auto':'smooth' }); }
+    }
+  }
+  function wire(sel){ [].forEach.call(document.querySelectorAll(sel), function(node){
+    node.addEventListener('click', function(){ filterTo(node.getAttribute('data-key')); }); }); }
+  wire('.fchip'); wire('.dist-seg'); wire('.leg');
+
+  // diff reveal — additive only: content is visible by default, never hidden permanently
+  if(!reduce && 'IntersectionObserver' in window){
+    var rows=[].slice.call(document.querySelectorAll('ul.items > li, .mcard'));
+    function reveal(r){ if(!r.dataset.pending) return; delete r.dataset.pending;
+      r.style.transition='opacity .5s ease, transform .5s cubic-bezier(.2,.7,.2,1)';
+      r.style.opacity='1'; r.style.transform='none'; }
+    function snap(r){ delete r.dataset.pending; r.style.transition='none';
+      r.style.opacity='1'; r.style.transform='none'; }
+    function snapAll(){ rows.forEach(snap); }
+    rows.forEach(function(r){ if(r.getBoundingClientRect().top > window.innerHeight*0.9){
+      r.dataset.pending='1'; r.style.opacity='0'; r.style.transform='translateY(10px)'; } });
+    var io=new IntersectionObserver(function(entries){ var d=0;
+      entries.forEach(function(en){ if(en.isIntersecting){ var r=en.target;
+        setTimeout(function(){ reveal(r); }, d*26); d++; io.unobserve(r); } }); },
+      { rootMargin:'0px 0px -6% 0px' });
+    rows.forEach(function(r){ if(r.dataset.pending) io.observe(r); });
+    setTimeout(snapAll,1600);
+    window.addEventListener('load', function(){ setTimeout(snapAll,700); });
+  }
+})();</script>
 </body>
 </html>
